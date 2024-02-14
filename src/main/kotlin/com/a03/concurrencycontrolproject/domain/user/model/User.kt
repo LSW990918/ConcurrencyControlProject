@@ -17,6 +17,9 @@ class User(
     @Column(name = "role")
     var role: UserRole,
 
+    @Column(name = "is_deleted")
+    var isDeleted: Boolean = false
+
     ) : BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
