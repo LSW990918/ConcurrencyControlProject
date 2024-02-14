@@ -4,9 +4,12 @@ import com.a03.concurrencycontrolproject.common.BaseTime
 import jakarta.persistence.*
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.processing.SQL
 
 @Entity
 @Table(name = "review")
+@SQLDelete(sql = "Update goods SET is_deleted = true WHERE id = ?")
 @OnDelete(action = OnDeleteAction.CASCADE)
 class Review(
     @Column(name = "comment")
