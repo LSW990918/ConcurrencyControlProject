@@ -8,7 +8,7 @@ import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
 
 @Entity
-@SQLDelete(sql = "UPDATE post SET is_deleted = true WHERE id = ?") // DELETE 쿼리 날아올 시 대신 실행
+@SQLDelete(sql = "UPDATE category SET is_deleted = true WHERE id = ?") // DELETE 쿼리 날아올 시 대신 실행
 @Where(clause = "is_deleted = false")
 @OnDelete(action = OnDeleteAction.CASCADE)
 @Table(name = "category")
