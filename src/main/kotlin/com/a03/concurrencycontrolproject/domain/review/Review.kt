@@ -5,11 +5,13 @@ import jakarta.persistence.*
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
 import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.SQLRestriction
 import org.hibernate.annotations.processing.SQL
 
 @Entity
 @Table(name = "review")
 @SQLDelete(sql = "Update goods SET is_deleted = true WHERE id = ?")
+@SQLRestriction("is_deleted = false")
 @OnDelete(action = OnDeleteAction.CASCADE)
 class Review(
     @Column(name = "comment")
@@ -19,7 +21,7 @@ class Review(
     var score: Int,
 
     @Column(name = "is_deleted")
-    var isDeleted: Boolean,
+    var isDeleted: Boolean = false,
 
 //    @ManyToOne
 //    @JoinColumn(name = "user_id")
