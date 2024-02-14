@@ -1,14 +1,12 @@
 package com.a03.concurrencycontrolproject.domain.goods.model
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
+import org.hibernate.annotations.SQLDelete
 import java.time.LocalDateTime
 
 
 @Entity
+@SQLDelete(sql = "Update goods SET is_deleted = true WHERE id = ?")
 @Table(name = "goods")
 data class goods(
     val title: String,
@@ -21,8 +19,8 @@ data class goods(
     // val category:Category,
     //@ManyToOne
     // val user:User
-    val isDeleted:Boolean = true,
-    val bookableDate: LocalDateTime,
+    var isDeleted: Boolean = false,
+    val bookableDate: LocalDateTime
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
