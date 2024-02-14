@@ -1,4 +1,5 @@
 package com.a03.concurrencycontrolproject.domain.category.dto
 
-class UpdateCategoryRequest {
-}
+data class UpdateCategoryRequest(
+    val title: String
+)

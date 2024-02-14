@@ -13,7 +13,7 @@ import org.hibernate.annotations.*
 class Category(
 
     @Column(name = "title")
-    val title: String,
+    var title: String,
 
     @Column(name = "is_deleted")
     val isDeleted: Boolean = false
@@ -21,6 +21,7 @@ class Category(
 ) : BaseTime() {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 

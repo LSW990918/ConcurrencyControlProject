@@ -1,4 +1,5 @@
 package com.a03.concurrencycontrolproject.domain.category.dto
 
-class CreateCategoryRequest {
-}
+data class CreateCategoryRequest(
+    val title: String
+)
