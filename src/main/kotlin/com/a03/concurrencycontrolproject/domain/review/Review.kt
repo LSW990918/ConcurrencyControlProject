@@ -28,6 +28,5 @@ class Review(
 ):BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_id")
     var id: Long? = null
 }
