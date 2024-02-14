@@ -1,5 +1,6 @@
 package com.a03.concurrencycontrolproject.domain.goods.model
 
+import com.a03.concurrencycontrolproject.common.BaseTime
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import java.time.LocalDateTime
@@ -21,7 +22,7 @@ data class goods(
     // val user:User
     var isDeleted: Boolean = false,
     val bookableDate: LocalDateTime
-) {
+) : BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
