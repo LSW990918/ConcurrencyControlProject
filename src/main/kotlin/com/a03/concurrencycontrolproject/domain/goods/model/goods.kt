@@ -28,8 +28,6 @@ class goods(
     // val category:Category,
     //@ManyToOne
     // val user:User
-    @Column(name = "is_deleted")
-    val isDeleted: Boolean = false,
     @Column(name = "bookable_date")
     val bookableDate: LocalDateTime
 ) : BaseTime() {
@@ -37,4 +35,8 @@ class goods(
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    @Column(name = "is_deleted")
+    var isDeleted: Boolean = false
+
 }
