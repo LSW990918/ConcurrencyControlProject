@@ -33,7 +33,7 @@ class UserController(
     fun updateProfile(
         @PathVariable userId: Long,
         @RequestBody request: UpdateProfileRequest
-    ): ResponseEntity<Unit> {
+    ): ResponseEntity<UserResponse> {
         userService.updateProfile(userId, request)
         return ResponseEntity
             .status(HttpStatus.OK)
@@ -44,7 +44,7 @@ class UserController(
     @PostMapping("/signup")
     fun signup(
         @RequestBody request: SignupRequest
-    ): ResponseEntity<Unit> {
+    ): ResponseEntity<UserResponse> {
         userService.signup(request)
         return ResponseEntity
             .status(HttpStatus.CREATED)
