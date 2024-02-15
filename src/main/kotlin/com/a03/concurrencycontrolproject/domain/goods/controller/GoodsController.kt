@@ -1,5 +1,6 @@
 package com.a03.concurrencycontrolproject.domain.goods.controller
 
+import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.goods.dto.CreateGoodsRequest
 import com.a03.concurrencycontrolproject.domain.goods.dto.GoodsResponse
 import com.a03.concurrencycontrolproject.domain.goods.dto.UpdateGoodsRequest
@@ -7,6 +8,8 @@ import com.a03.concurrencycontrolproject.domain.goods.service.GoodsService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 
@@ -16,16 +19,15 @@ class GoodsController(
     val goodsService: GoodsService
 ) {
 
-    // TODO PreAuthorize hasRole
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN','SELLER')")
     fun createGoods(
         @PathVariable categoryId: Long,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @Valid @RequestBody createGoodsRequest: CreateGoodsRequest
     ): ResponseEntity<Unit> {
-        // TODO user dependency
-        val userId = 1L
         createGoodsRequest.categoryId = categoryId
-        createGoodsRequest.userId = userId
+        createGoodsRequest.userId = userPrincipal.id
         goodsService.createGoods(createGoodsRequest)
 
         return ResponseEntity
@@ -34,41 +36,45 @@ class GoodsController(
     }
 
     @PutMapping("/{goodsId}")
+    @PreAuthorize("hasAnyRole('ADMIN','SELLER')")
     fun updateGoods(
         @PathVariable categoryId: Long,
         @PathVariable goodsId: Long,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody updateGoodsRequest: UpdateGoodsRequest
     ): ResponseEntity<Unit> {
         updateGoodsRequest.goodsId = goodsId
-        // TODO userId get
-        updateGoodsRequest.userId = 0L
-        goodsService.updateGoods(updateGoodsRequest)
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .build()
+        updateGoodsRequest.userId = userPrincipal.id
+        return goodsService.updateGoods(updateGoodsRequest).let {
+            ResponseEntity
+                .status(HttpStatus.OK)
+                .build()
+        }
     }
 
     @DeleteMapping("/{goodsId}")
+    @PreAuthorize("hasAnyRole('ADMIN','SELLER')")
     fun deleteGoods(
         @PathVariable categoryId: Long,
-        @PathVariable goodsId: Long
+        @PathVariable goodsId: Long,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
     ): ResponseEntity<Unit> {
-        goodsService.deleteGoods(goodsId)
-
-        return ResponseEntity
-            .status(HttpStatus.NO_CONTENT)
-            .build()
+        return goodsService.deleteGoods(userPrincipal.id, goodsId).let {
+            ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build()
+        }
     }
 
     @GetMapping
     fun getGoodsList(
         @PathVariable categoryId: Long,
     ): ResponseEntity<List<GoodsResponse>> {
-        val goodsResponseList = goodsService.getGoodsList(categoryId)
-
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(goodsResponseList)
+        return goodsService.getGoodsList(categoryId).let {
+            ResponseEntity
+                .status(HttpStatus.OK)
+                .body(it)
+        }
     }
 
     @GetMapping("/{goodsId}")
@@ -76,10 +82,11 @@ class GoodsController(
         @PathVariable categoryId: Long,
         @PathVariable goodsId: Long
     ): ResponseEntity<GoodsResponse> {
-        val goodsResponse = goodsService.getGoods(goodsId)
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(goodsResponse)
+        return goodsService.getGoods(goodsId).let {
+            ResponseEntity
+                .status(HttpStatus.OK)
+                .body(it)
+        }
     }
 
 }

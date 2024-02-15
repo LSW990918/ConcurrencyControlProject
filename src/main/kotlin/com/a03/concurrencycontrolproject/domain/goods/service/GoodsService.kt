@@ -10,7 +10,7 @@ interface GoodsService {
 
     fun updateGoods(request: UpdateGoodsRequest)
 
-    fun deleteGoods(goodsId: Long)
+    fun deleteGoods(userId: Long, goodsId: Long)
 
     fun getGoodsList(categoryId: Long): List<GoodsResponse>
 

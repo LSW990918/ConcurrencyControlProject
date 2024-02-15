@@ -38,5 +38,4 @@ data class CreateGoodsRequest(
         return LocalDateTime.parse(date, formatter)
     }
 
-
 }

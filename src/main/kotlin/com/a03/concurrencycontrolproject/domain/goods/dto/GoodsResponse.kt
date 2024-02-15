@@ -10,6 +10,6 @@ data class GoodsResponse(
     val bookableDate: LocalDateTime,
     val date: LocalDateTime,
     val ticketAmount: Int,
-    val availableTicketAmount:Int,
+    val availableTicketAmount: Int,
     val price: Int
 )

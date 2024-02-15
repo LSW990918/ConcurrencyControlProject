@@ -1,5 +1,7 @@
 package com.a03.concurrencycontrolproject.domain.goods.service
 
+import com.a03.concurrencycontrolproject.common.exception.AccessDeniedException
+import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
 import com.a03.concurrencycontrolproject.domain.category.model.Category
 import com.a03.concurrencycontrolproject.domain.category.repository.CategoryRepository
 import com.a03.concurrencycontrolproject.domain.goods.dto.CreateGoodsRequest
@@ -7,6 +9,9 @@ import com.a03.concurrencycontrolproject.domain.goods.dto.GoodsResponse
 import com.a03.concurrencycontrolproject.domain.goods.dto.UpdateGoodsRequest
 import com.a03.concurrencycontrolproject.domain.goods.model.Goods
 import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
+import com.a03.concurrencycontrolproject.domain.user.model.User
+import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
+import com.a03.concurrencycontrolproject.domain.user.repository.UserRole
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,45 +20,73 @@ import org.springframework.transaction.annotation.Transactional
 class GoodsServiceImpl(
     val goodsRepository: GoodsRepository,
     val categoryRepository: CategoryRepository,
-//    val userRepository
+    val userRepository: UserRepository
 ) : GoodsService {
 
     @Transactional
     override fun createGoods(request: CreateGoodsRequest) {
-        // TODO RuntimeException 변경
-        val category = categoryRepository.findByIdOrNull(request.categoryId) ?: throw RuntimeException("")
-        // TODO get user or throw
-        // TODO toEntity(category,user)
-        goodsRepository.save(request.toEntity(category))
+
+        val category = categoryRepository.findByIdOrNull(request.categoryId)
+            ?: throw ModelNotFoundException("Category", request.categoryId)
+
+        val user = userRepository.findByIdOrNull(request.userId)
+            ?: throw ModelNotFoundException("User", request.userId)
+
+        goodsRepository.save(request.toEntity(category, user))
     }
 
     @Transactional
     override fun updateGoods(request: UpdateGoodsRequest) {
-        // TODO goods 생성자와 userId validation
+        val goods = goodsRepository.findByIdOrNull(request.goodsId)
+            ?: throw ModelNotFoundException("Goods", request.goodsId)
+
+        val user = userRepository.findByIdOrNull(request.userId)
+            ?: throw ModelNotFoundException("User", request.userId)
+
+        val category = categoryRepository.findByIdOrNull(request.categoryId)
+            ?: throw ModelNotFoundException("User", request.userId)
 
 
-        TODO("Not yet implemented")
+        if (goods.user.role != UserRole.ADMIN && goods.user.id != user.id) {
+            throw AccessDeniedException(user.id!!)
+        }
+
+        request.let {
+            goods.category = category
+            goods.runningTime = it.runningTime
+            goods.price = it.price
+            goods.title = it.title
+        }
     }
 
-    override fun deleteGoods(goodsId: Long) {
-        TODO("Not yet implemented")
+    override fun deleteGoods(userId: Long, goodsId: Long) {
+        val user = userRepository.findByIdOrNull(userId)
+            ?: throw ModelNotFoundException("User", userId)
+
+        val goods = goodsRepository.findByIdOrNull(goodsId)
+            ?: throw ModelNotFoundException("Goods", goodsId)
+
+        if (goods.user.role != UserRole.ADMIN && goods.user.id != user.id) {
+            throw AccessDeniedException(user.id!!)
+        }
+        goodsRepository.delete(goods)
     }
 
     override fun getGoodsList(categoryId: Long): List<GoodsResponse> {
-        // TODO RuntimeException 변경
-        categoryRepository.findByIdOrNull(categoryId) ?: throw RuntimeException("")
+        categoryRepository.findByIdOrNull(categoryId)
+            ?: throw ModelNotFoundException("Category", categoryId)
 
         return goodsRepository.findByCategoryId(categoryId).map { it.toResponse() }
     }
 
     override fun getGoods(goodsId: Long): GoodsResponse {
-        TODO("Not yet implemented")
+        return goodsRepository.findByIdOrNull(goodsId)?.toResponse()
+            ?: throw ModelNotFoundException("Goods", goodsId)
     }
 
 }
 
-// TODO user:User 추가
-private fun CreateGoodsRequest.toEntity(category: Category): Goods {
+private fun CreateGoodsRequest.toEntity(category: Category, user: User): Goods {
     return Goods(
         title = title,
         runningTime = runningTime,
@@ -63,7 +96,7 @@ private fun CreateGoodsRequest.toEntity(category: Category): Goods {
         price = price,
         place = place,
         category = category,
-//        user = user,
+        user = user,
     )
 }
 
@@ -76,7 +109,7 @@ private fun Goods.toResponse(): GoodsResponse {
         bookableDate = bookableDate,
         date = date,
         ticketAmount = ticketAmount,
-        // TODO ticket
+        // TODO availableTicketAmount
         availableTicketAmount = 1,
         price = price
     )

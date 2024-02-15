@@ -4,6 +4,8 @@ import com.a03.concurrencycontrolproject.common.BaseTime
 import com.a03.concurrencycontrolproject.domain.category.model.Category
 import com.a03.concurrencycontrolproject.domain.user.model.User
 import jakarta.persistence.*
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
 import java.time.LocalDateTime
@@ -15,9 +17,9 @@ import java.time.LocalDateTime
 @Table(name = "goods")
 class Goods(
     @Column(name = "title")
-    val title: String,
+    var title: String,
     @Column(name = "running_time")
-    val runningTime: Int,
+    var runningTime: Int,
     @Column(name = "date")
     val date: LocalDateTime,
     @Column(name = "bookable_date")
@@ -25,13 +27,19 @@ class Goods(
     @Column(name = "ticket_amount")
     val ticketAmount: Int,
     @Column(name = "price")
-    val price: Int,
+    var price: Int,
     @Column(name = "place")
     val place: String,
+
     @ManyToOne
-    val category: Category,
-//    @ManyToOne
-//    val user: User,
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "category_id")
+    var category: Category,
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "user_id")
+    val user: User,
 ) : BaseTime() {
     @Id
     @Column(name = "id")
