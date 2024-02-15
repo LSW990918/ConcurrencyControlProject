@@ -1,10 +1,14 @@
 package com.a03.concurrencycontrolproject.domain.user.controller
 
+import com.a03.concurrencycontrolproject.common.exception.AccessDeniedException
+import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.user.dto.*
 import com.a03.concurrencycontrolproject.domain.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -19,6 +23,7 @@ class UserController(
 ) {
 
     @Operation(summary = "프로필 조회")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SELLER') or hasRole('MEMBER')")
     @GetMapping("/users/{userId}")
     fun getProfile(
         @PathVariable userId: Long
@@ -32,9 +37,14 @@ class UserController(
     @PutMapping("/users/{userId}")
     fun updateProfile(
         @PathVariable userId: Long,
-        @RequestBody request: UpdateProfileRequest
+        @RequestBody request: UpdateProfileRequest,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<UserResponse> {
-        userService.updateProfile(userId, request)
+        if (userId == userPrincipal.id) {
+            userService.updateProfile(userId, request)
+        } else {
+            throw AccessDeniedException(userId)
+        }
         return ResponseEntity
             .status(HttpStatus.OK)
             .build()
@@ -64,9 +74,14 @@ class UserController(
     @Operation(summary = "회원탈퇴")
     @DeleteMapping("/users/{userId}")
     fun deleteUser(
-        @PathVariable userId: Long
+        @PathVariable userId: Long,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<Any> {
-        userService.deleteUser(userId)
+        if (userId == userPrincipal.id) {
+            userService.deleteUser(userId)
+        } else {
+            throw AccessDeniedException(userId)
+        }
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .body("회원탈퇴 완료했습니다.")

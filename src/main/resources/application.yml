@@ -1,4 +1,6 @@
 spring:
+
+
   jpa:
     properties:
       hibernate:
@@ -17,3 +19,9 @@ logging:
             bind: trace
       springframework:
         security: debug
+
+auth:
+  jwt:
+    issuer: team.sparta.com
+    secret: ${JWT_SECRET}
+    accessTokenExpirationHour: 168

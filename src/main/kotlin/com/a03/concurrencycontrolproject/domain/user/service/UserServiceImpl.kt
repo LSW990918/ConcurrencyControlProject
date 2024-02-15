@@ -3,6 +3,7 @@ package com.a03.concurrencycontrolproject.domain.user.service
 import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
 import com.a03.concurrencycontrolproject.common.exception.NotExistRoleException
 import com.a03.concurrencycontrolproject.common.exception.WrongEmailOrPasswordException
+import com.a03.concurrencycontrolproject.common.security.jwt.JwtPlugin
 import com.a03.concurrencycontrolproject.domain.user.dto.*
 import com.a03.concurrencycontrolproject.domain.user.model.User
 import com.a03.concurrencycontrolproject.domain.user.model.checkedEmailOrNicknameExists
@@ -11,11 +12,14 @@ import com.a03.concurrencycontrolproject.domain.user.model.toResponse
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRole
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class UserServiceImpl(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder,
+    private val jwtPlugin: JwtPlugin
 ): UserService {
 
     override fun getProfile(userId: Long): UserResponse {
@@ -38,7 +42,7 @@ class UserServiceImpl(
         return userRepository.save(
             User(
                 email = request.email,
-                password = request.password,
+                password = passwordEncoder.encode(request.password),
                 nickname = request.nickname,
                 isDeleted = false,
                 role = when (request.role) {
@@ -53,9 +57,13 @@ class UserServiceImpl(
 
     override fun login(request: LoginRequest): LoginResponse {
         val user = userRepository.findByEmail(request.email) ?: throw WrongEmailOrPasswordException(request.email)
-        checkedLoginPassword(user.password, request.password)
+        checkedLoginPassword(user.password, request.password, passwordEncoder)
         return LoginResponse(
-            accessToken = "dddd"
+            accessToken = jwtPlugin.generateAccessToken(
+                subject = user.id.toString(),
+                email = user.email,
+                role = user.role.name
+            )
         )
     }
 
