@@ -3,6 +3,7 @@ package com.a03.concurrencycontrolproject.domain.user.controller
 import com.a03.concurrencycontrolproject.common.exception.AccessDeniedException
 import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.user.dto.*
+import com.a03.concurrencycontrolproject.domain.user.repository.UserRole
 import com.a03.concurrencycontrolproject.domain.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -54,6 +56,7 @@ class UserController(
     @Operation(summary = "회원가입")
     @PostMapping("/signup")
     fun signup(
+        @RequestParam userRole: UserRole,
        @Valid @RequestBody request: SignupRequest
     ): ResponseEntity<UserResponse> {
         userService.signup(request)

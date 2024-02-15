@@ -37,7 +37,7 @@ class UserServiceImpl(
     }
 
 
-    override fun signup(request: SignupRequest): UserResponse {
+    override fun signup(userRole: UserRole ,request: SignupRequest): UserResponse {
         checkedEmailOrNicknameExists(request.email, request.nickname, userRepository)
         return userRepository.save(
             User(
@@ -45,12 +45,7 @@ class UserServiceImpl(
                 password = passwordEncoder.encode(request.password),
                 nickname = request.nickname,
                 isDeleted = false,
-                role = when (request.role) {
-                    "ADMIN" -> UserRole.ADMIN
-                    "SELLER" -> UserRole.SELLER
-                    "MEMBER" -> UserRole.MEMBER
-                    else -> throw NotExistRoleException(request.role)
-                }
+                role = userRole
             )
         ).toResponse()
     }
