@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 @SQLDelete(sql = "Update goods SET is_deleted = true WHERE id = ?")
 @SQLRestriction("is_deleted = false")
 @Table(name = "goods")
-class goods(
+class Goods(
     @Column(name = "title")
     val title: String,
     @Column(name = "running_time")
