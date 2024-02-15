@@ -1,6 +1,8 @@
 package com.a03.concurrencycontrolproject.domain.goods.model
 
 import com.a03.concurrencycontrolproject.common.BaseTime
+import com.a03.concurrencycontrolproject.domain.category.model.Category
+import com.a03.concurrencycontrolproject.domain.user.model.User
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
@@ -24,10 +26,10 @@ class Goods(
     val price: Int,
     @Column(name = "place")
     val place: String,
-    //@ManyToOne
-    // val category:Category,
-    //@ManyToOne
-    // val user:User
+    @ManyToOne
+    val category: Category,
+    @ManyToOne
+    val user: User,
     @Column(name = "bookable_date")
     val bookableDate: LocalDateTime
 ) : BaseTime() {
