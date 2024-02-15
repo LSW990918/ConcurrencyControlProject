@@ -16,13 +16,13 @@ import org.hibernate.annotations.SQLRestriction
 @Table(name = "ticket")
 class Ticket(
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    val user: User,
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    val user: User,
 
-//    @ManyToOne
-//    @JoinColumn(name = "goods_id")
-//    val goods: Goods
+    @ManyToOne
+    @JoinColumn(name = "goods_id")
+    val goods: Goods
 ): BaseTime() {
 
     @Id

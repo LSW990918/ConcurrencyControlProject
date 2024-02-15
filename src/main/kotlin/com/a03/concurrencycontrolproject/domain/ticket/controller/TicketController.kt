@@ -16,6 +16,7 @@ class TicketController(
 
     @PostMapping
     fun createTicket(
+//        @AuthenticationPrincipal user: UserPrincipal,
         @RequestBody request: CreateTicketRequest
     ): ResponseEntity<Unit> {
         return ResponseEntity
@@ -25,6 +26,7 @@ class TicketController(
 
     @DeleteMapping("/{ticketId}")
     fun deleteTicket(
+//        @AuthenticationPrincipal user: UserPrincipal,
         @PathVariable ticketId: Long
     ): ResponseEntity<Unit> {
         return ResponseEntity
