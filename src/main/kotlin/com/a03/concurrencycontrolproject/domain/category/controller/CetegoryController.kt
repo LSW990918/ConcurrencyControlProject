@@ -24,7 +24,7 @@ class CetegoryController(
     @PostMapping
     fun createCategory(
         @RequestBody request: CreateCategoryRequest
-    ): ResponseEntity<CategoryResponse> {
+    ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(categoryService.createCategory(request))
@@ -34,7 +34,7 @@ class CetegoryController(
     fun updateCategory(
         @PathVariable categoryId: Long,
         @RequestBody request: UpdateCategoryRequest
-    ): ResponseEntity<CategoryResponse> {
+    ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(categoryService.updateCategory(categoryId, request))
