@@ -12,7 +12,6 @@ import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRole
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserServiceImpl(
@@ -60,8 +59,9 @@ class UserServiceImpl(
         )
     }
 
-    override fun logout() {
-        TODO("Not yet implemented")
-    }
+    override fun deleteUser(userId: Long) {
+        val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
 
+        userRepository.delete(user)
+    }
 }

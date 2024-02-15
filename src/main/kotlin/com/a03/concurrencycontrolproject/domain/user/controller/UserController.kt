@@ -61,12 +61,14 @@ class UserController(
             .body(userService.login(request))
     }
 
-    @Operation(summary = "로그아웃")
-    @DeleteMapping("/logout")
-    fun logout(): ResponseEntity<Unit> {
-        userService.logout()
+    @Operation(summary = "회원탈퇴")
+    @DeleteMapping("/users/{userId}")
+    fun deleteUser(
+        @PathVariable userId: Long
+    ): ResponseEntity<Any> {
+        userService.deleteUser(userId)
         return ResponseEntity
-            .status(HttpStatus.OK)
-            .build()
+            .status(HttpStatus.NO_CONTENT)
+            .body("회원탈퇴 완료했습니다.")
     }
 }

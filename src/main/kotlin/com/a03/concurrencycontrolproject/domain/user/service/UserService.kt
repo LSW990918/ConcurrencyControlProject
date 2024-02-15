@@ -11,5 +11,5 @@ interface UserService {
 
     fun login(request: LoginRequest): LoginResponse
 
-    fun logout()
+    fun deleteUser(userId: Long)
 }
