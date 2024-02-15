@@ -5,6 +5,7 @@ import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.user.dto.*
 import com.a03.concurrencycontrolproject.domain.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -53,7 +54,7 @@ class UserController(
     @Operation(summary = "회원가입")
     @PostMapping("/signup")
     fun signup(
-        @RequestBody request: SignupRequest
+       @Valid @RequestBody request: SignupRequest
     ): ResponseEntity<UserResponse> {
         userService.signup(request)
         return ResponseEntity
