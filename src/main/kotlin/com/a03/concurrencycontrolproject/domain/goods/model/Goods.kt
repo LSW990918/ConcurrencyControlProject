@@ -20,6 +20,8 @@ class Goods(
     val runningTime: Int,
     @Column(name = "date")
     val date: LocalDateTime,
+    @Column(name = "bookable_date")
+    val bookableDate: LocalDateTime,
     @Column(name = "ticket_amount")
     val ticketAmount: Int,
     @Column(name = "price")
@@ -28,10 +30,8 @@ class Goods(
     val place: String,
     @ManyToOne
     val category: Category,
-    @ManyToOne
-    val user: User,
-    @Column(name = "bookable_date")
-    val bookableDate: LocalDateTime
+//    @ManyToOne
+//    val user: User,
 ) : BaseTime() {
     @Id
     @Column(name = "id")
@@ -40,5 +40,8 @@ class Goods(
 
     @Column(name = "is_deleted")
     var isDeleted: Boolean = false
+//  Todo dependency
+//    @OneToMany(fetch = FetchType.LAZY)
+//    val ticket:Ticket
 
 }
