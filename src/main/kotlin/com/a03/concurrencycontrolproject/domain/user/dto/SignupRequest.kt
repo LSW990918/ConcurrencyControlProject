@@ -1,8 +1,8 @@
 package com.a03.concurrencycontrolproject.domain.user.dto
 
-data class UserResponse (
-    val id: Long,
+data class SignupRequest(
     val email: String,
+    val password: String,
     val nickname: String,
     val role: String,
 )
