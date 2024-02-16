@@ -2,11 +2,10 @@ package com.a03.concurrencycontrolproject.domain.goods.model
 
 import com.a03.concurrencycontrolproject.common.BaseTime
 import com.a03.concurrencycontrolproject.domain.category.model.Category
+import com.a03.concurrencycontrolproject.domain.review.model.Review
 import com.a03.concurrencycontrolproject.domain.ticket.model.Ticket
 import com.a03.concurrencycontrolproject.domain.user.model.User
 import jakarta.persistence.*
-import org.hibernate.annotations.OnDelete
-import org.hibernate.annotations.OnDeleteAction
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
 import java.time.LocalDateTime
@@ -33,12 +32,10 @@ class Goods(
     val place: String,
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "category_id")
     var category: Category,
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
     val user: User,
 ) : BaseTime() {
@@ -52,5 +49,8 @@ class Goods(
 
     @OneToMany(mappedBy = "goods", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     var ticket: MutableList<Ticket> = mutableListOf()
+
+    @OneToMany(mappedBy = "goods", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    var review: MutableList<Review> = mutableListOf()
 
 }
