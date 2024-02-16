@@ -6,9 +6,9 @@ import com.a03.concurrencycontrolproject.domain.category.dto.UpdateCategoryReque
 
 interface CategoryService {
 
-    fun createCategory(request: CreateCategoryRequest) : CategoryResponse
+    fun createCategory(request: CreateCategoryRequest)
 
-    fun updateCategory(categoryId: Long, request: UpdateCategoryRequest) : CategoryResponse
+    fun updateCategory(categoryId: Long, request: UpdateCategoryRequest)
 
     fun deleteCategory(categoryId: Long)
 
