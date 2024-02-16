@@ -3,6 +3,7 @@ package com.a03.concurrencycontrolproject.common.exception
 import com.a03.concurrencycontrolproject.common.exception.dto.BaseResponse
 import com.a03.concurrencycontrolproject.common.exception.dto.ErrorResponse
 import com.a03.concurrencycontrolproject.common.exception.status.ResultCode
+import org.apache.coyote.Response
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.FieldError
@@ -12,6 +13,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
+
+    @ExceptionHandler
+    fun handleRuntimeException(e: RuntimeException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(ErrorResponse(message = "Internal error"))
+    }
+
 
     @ExceptionHandler(ModelNotFoundException::class)
     fun handleModelNotFoundException(e: ModelNotFoundException): ResponseEntity<ErrorResponse> {

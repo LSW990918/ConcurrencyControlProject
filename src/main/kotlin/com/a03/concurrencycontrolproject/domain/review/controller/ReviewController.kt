@@ -17,15 +17,15 @@ class ReviewController(
 ) {
 
     @PostMapping
-    fun createReview(@PathVariable goodsId: Long, @RequestBody createReviewRequest: CreateReviewRequest, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
+    fun createReview(@RequestBody createReviewRequest: CreateReviewRequest, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
         return reviewService.createReview(createReviewRequest, userPrincipal).let { ResponseEntity.status(HttpStatus.CREATED) }.build()
     }
 
-    @PatchMapping("/{reviewId}")
-    fun updateReview(@PathVariable goodsId: Long, @PathVariable reviewId: Long, @RequestBody updateReviewRequest: UpdateReviewRequest, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
+    @PatchMapping
+    fun updateReview(@RequestBody updateReviewRequest: UpdateReviewRequest, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
         val requests = UpdateReviewRequest(
-            id = reviewId,
-            goodsId = goodsId,
+            id = updateReviewRequest.id,
+            goodsId = updateReviewRequest.goodsId,
             score = updateReviewRequest.score,
             comment = updateReviewRequest.comment
         )
@@ -38,7 +38,7 @@ class ReviewController(
     }
 
     @DeleteMapping("/{reviewId}")
-    fun deleteReview(@PathVariable goodsId: Long, @PathVariable reviewId: Long, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
-        return reviewService.deleteReview(goodsId, reviewId, userPrincipal).let { ResponseEntity.status(HttpStatus.NO_CONTENT).build() }
+    fun deleteReview(@PathVariable reviewId: Long, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
+        return reviewService.deleteReview(reviewId, userPrincipal).let { ResponseEntity.status(HttpStatus.NO_CONTENT).build() }
     }
 }
