@@ -24,8 +24,7 @@ data class GoodsResponse(
                 bookableDate = goods.bookableDate,
                 date = goods.date,
                 ticketAmount = goods.ticketAmount,
-                // TODO availableTicketAmount
-                availableTicketAmount = 1,
+                availableTicketAmount = goods.ticketAmount - goods.ticket.size,
                 price = goods.price
             )
         }
