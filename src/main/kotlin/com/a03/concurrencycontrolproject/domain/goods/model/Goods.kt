@@ -2,6 +2,7 @@ package com.a03.concurrencycontrolproject.domain.goods.model
 
 import com.a03.concurrencycontrolproject.common.BaseTime
 import com.a03.concurrencycontrolproject.domain.category.model.Category
+import com.a03.concurrencycontrolproject.domain.ticket.model.Ticket
 import com.a03.concurrencycontrolproject.domain.user.model.User
 import jakarta.persistence.*
 import org.hibernate.annotations.OnDelete
@@ -45,10 +46,11 @@ class Goods(
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
     @Column(name = "is_deleted")
     var isDeleted: Boolean = false
-//  Todo dependency
-//    @OneToMany(fetch = FetchType.LAZY)
-//    val ticket:Ticket
+
+    @OneToMany(mappedBy = "ticket", fetch = FetchType.LAZY)
+    var ticket: MutableList<Ticket> = mutableListOf()
 
 }
