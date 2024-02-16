@@ -50,7 +50,7 @@ class Goods(
     @Column(name = "is_deleted")
     var isDeleted: Boolean = false
 
-    @OneToMany(mappedBy = "ticket", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "goods", fetch = FetchType.LAZY)
     var ticket: MutableList<Ticket> = mutableListOf()
 
 }
