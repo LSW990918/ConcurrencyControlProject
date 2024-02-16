@@ -1,14 +1,12 @@
 package com.a03.concurrencycontrolproject.domain.user.service
 
 import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
-import com.a03.concurrencycontrolproject.common.exception.NotExistRoleException
 import com.a03.concurrencycontrolproject.common.exception.WrongEmailOrPasswordException
 import com.a03.concurrencycontrolproject.common.security.jwt.JwtPlugin
 import com.a03.concurrencycontrolproject.domain.user.dto.*
 import com.a03.concurrencycontrolproject.domain.user.model.User
 import com.a03.concurrencycontrolproject.domain.user.model.checkedEmailOrNicknameExists
 import com.a03.concurrencycontrolproject.domain.user.model.checkedLoginPassword
-import com.a03.concurrencycontrolproject.domain.user.model.toResponse
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRole
 import org.springframework.data.repository.findByIdOrNull
@@ -23,23 +21,21 @@ class UserServiceImpl(
 ): UserService {
 
     override fun getProfile(userId: Long): UserResponse {
-        val profile = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
-
-        return profile.toResponse()
+       return userRepository.findByIdOrNull(userId)?.let { UserResponse.from(it) }
+           ?: throw ModelNotFoundException("User", userId)
     }
 
-    override fun updateProfile(userId: Long, request: UpdateProfileRequest): UserResponse {
+    override fun updateProfile(userId: Long, request: UpdateProfileRequest) {
         val profile = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         profile.toUpdate(request)
         userRepository.save(profile)
 
-        return profile.toResponse()
     }
 
 
-    override fun signup(userRole: UserRole ,request: SignupRequest): UserResponse {
+    override fun signup(userRole: UserRole ,request: SignupRequest) {
         checkedEmailOrNicknameExists(request.email, request.nickname, userRepository)
-        return userRepository.save(
+        userRepository.save(
             User(
                 email = request.email,
                 password = passwordEncoder.encode(request.password),
@@ -47,7 +43,7 @@ class UserServiceImpl(
                 isDeleted = false,
                 role = userRole
             )
-        ).toResponse()
+        )
     }
 
     override fun login(request: LoginRequest): LoginResponse {

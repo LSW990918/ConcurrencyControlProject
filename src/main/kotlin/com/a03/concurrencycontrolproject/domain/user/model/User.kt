@@ -48,15 +48,6 @@ class User(
     }
 }
 
-fun User.toResponse(): UserResponse {
-    return UserResponse(
-        id = id!!,
-        email = email,
-        nickname = nickname,
-        role = role.name
-    )
-}
-
 fun checkedEmailOrNicknameExists(email: String, nickname: String, userRepository: UserRepository) {
     if (userRepository.existsByEmail(email)) {
         throw EmailAlreadyExistException(email)
