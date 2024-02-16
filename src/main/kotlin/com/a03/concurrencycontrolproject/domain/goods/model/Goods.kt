@@ -45,7 +45,6 @@ class Goods(
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-
     @Column(name = "is_deleted")
     var isDeleted: Boolean = false
 //  Todo dependency

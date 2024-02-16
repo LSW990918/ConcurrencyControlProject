@@ -14,18 +14,17 @@ class CategoryServiceImpl(
     private val categoryRepository: CategoryRepository
 ) : CategoryService {
 
-    override fun createCategory(request: CreateCategoryRequest): CategoryResponse {
+    override fun createCategory(request: CreateCategoryRequest) {
         val category = Category(
             title = request.title
         )
-        return category.toResponse()
+        categoryRepository.save(category)
     }
 
-    override fun updateCategory(categoryId: Long, request: UpdateCategoryRequest): CategoryResponse {
+    override fun updateCategory(categoryId: Long, request: UpdateCategoryRequest){
         val category = categoryRepository.findByIdOrNull(categoryId)
             ?: throw Exception()
         category.title = request.title
-        return category.toResponse()
     }
 
     override fun deleteCategory(categoryId: Long) {
