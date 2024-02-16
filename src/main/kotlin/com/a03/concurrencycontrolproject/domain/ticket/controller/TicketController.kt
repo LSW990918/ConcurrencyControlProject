@@ -1,8 +1,10 @@
 package com.a03.concurrencycontrolproject.domain.ticket.controller
 
+import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
 import com.a03.concurrencycontrolproject.domain.ticket.service.TicketService
+
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -16,36 +18,36 @@ class TicketController(
 
     @PostMapping
     fun createTicket(
-//        @AuthenticationPrincipal user: UserPrincipal,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: CreateTicketRequest
     ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(ticketService.createTicket(request))
+            .body(ticketService.createTicket(userPrincipal.id, request))
     }
 
     @DeleteMapping("/{ticketId}")
     fun deleteTicket(
-//        @AuthenticationPrincipal user: UserPrincipal,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable ticketId: Long
     ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
-            .body(ticketService.deleteTicket(ticketId))
+            .body(ticketService.deleteTicket(userPrincipal.id, ticketId))
     }
 
-    @GetMapping()//Path로 유저아이디를 받아야함 -> 토큰에서 받아올 방법 생각해보기
+    @GetMapping("/mine")
     fun getTicketOfMember(
-//        @AuthenticationPrincipal user: UserPrincipal
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<List<TicketResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(ticketService.getTicketOfMember())
+            .body(ticketService.getTicketOfMember(userPrincipal.id))
     }
 
-    @GetMapping("/{goodsId}")
+    @GetMapping()
     fun getTicketOfGoods(
-        @PathVariable goodsId: Long
+        @RequestParam goodsId: Long
     ): ResponseEntity<List<TicketResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)

@@ -1,15 +1,16 @@
 package com.a03.concurrencycontrolproject.domain.ticket.service
 
+import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
 
 interface TicketService {
 
-    fun createTicket(request: CreateTicketRequest)
+    fun createTicket(userId: Long, request: CreateTicketRequest)
 
-    fun deleteTicket(ticketId: Long)
+    fun deleteTicket(userId: Long, ticketId: Long)
 
-    fun getTicketOfMember(): List<TicketResponse>
+    fun getTicketOfMember(userId: Long): List<TicketResponse>
 
     fun getTicketOfGoods(goodsId: Long): List<TicketResponse>
 }
