@@ -2,6 +2,7 @@ package com.a03.concurrencycontrolproject.domain.review.controller
 
 import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.review.dto.CreateReviewRequest
+import com.a03.concurrencycontrolproject.domain.review.dto.DeleteReviewRequest
 import com.a03.concurrencycontrolproject.domain.review.dto.ReviewResponse
 import com.a03.concurrencycontrolproject.domain.review.dto.UpdateReviewRequest
 import com.a03.concurrencycontrolproject.domain.review.service.ReviewService
@@ -17,15 +18,15 @@ class ReviewController(
 ) {
 
     @PostMapping
-    fun createReview(@PathVariable goodsId: Long, @RequestBody createReviewRequest: CreateReviewRequest, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
+    fun createReview(@RequestBody createReviewRequest: CreateReviewRequest, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
         return reviewService.createReview(createReviewRequest, userPrincipal).let { ResponseEntity.status(HttpStatus.CREATED) }.build()
     }
 
-    @PatchMapping("/{reviewId}")
-    fun updateReview(@PathVariable goodsId: Long, @PathVariable reviewId: Long, @RequestBody updateReviewRequest: UpdateReviewRequest, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
+    @PatchMapping
+    fun updateReview(@RequestBody updateReviewRequest: UpdateReviewRequest, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
         val requests = UpdateReviewRequest(
-            id = reviewId,
-            goodsId = goodsId,
+            id = updateReviewRequest.id,
+            goodsId = updateReviewRequest.goodsId,
             score = updateReviewRequest.score,
             comment = updateReviewRequest.comment
         )
@@ -37,8 +38,8 @@ class ReviewController(
         return ResponseEntity.status(HttpStatus.OK).body(reviewService.getReviewList(goodsId))
     }
 
-    @DeleteMapping("/{reviewId}")
-    fun deleteReview(@PathVariable goodsId: Long, @PathVariable reviewId: Long, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
-        return reviewService.deleteReview(goodsId, reviewId, userPrincipal).let { ResponseEntity.status(HttpStatus.NO_CONTENT).build() }
+    @DeleteMapping
+    fun deleteReview(@RequestBody deleteReviewRequest: DeleteReviewRequest, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
+        return reviewService.deleteReview(deleteReviewRequest, userPrincipal).let { ResponseEntity.status(HttpStatus.NO_CONTENT).build() }
     }
 }
