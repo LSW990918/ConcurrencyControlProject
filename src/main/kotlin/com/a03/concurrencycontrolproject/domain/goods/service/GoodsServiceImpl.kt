@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional
 class GoodsServiceImpl(
     val goodsRepository: GoodsRepository,
     val categoryRepository: CategoryRepository,
-    val userRepository: UserRepository
+    val userRepository: UserRepository,
 ) : GoodsService {
 
     @Transactional
@@ -32,7 +32,7 @@ class GoodsServiceImpl(
         val user = userRepository.findByIdOrNull(request.userId)
             ?: throw ModelNotFoundException("User", request.userId)
 
-        goodsRepository.save(request.toEntity(category, user))
+        goodsRepository.save(request.to(category, user))
     }
 
     @Transactional
@@ -76,41 +76,12 @@ class GoodsServiceImpl(
         categoryRepository.findByIdOrNull(categoryId)
             ?: throw ModelNotFoundException("Category", categoryId)
 
-        return goodsRepository.findByCategoryId(categoryId).map { it.toResponse() }
+        return goodsRepository.findByCategoryId(categoryId).map { GoodsResponse.from(it) }
     }
 
     override fun getGoods(goodsId: Long): GoodsResponse {
-        return goodsRepository.findByIdOrNull(goodsId)?.toResponse()
+        return goodsRepository.findByIdOrNull(goodsId)?.let { GoodsResponse.from(it) }
             ?: throw ModelNotFoundException("Goods", goodsId)
     }
 
-}
-
-private fun CreateGoodsRequest.toEntity(category: Category, user: User): Goods {
-    return Goods(
-        title = title,
-        runningTime = runningTime,
-        date = convertDate,
-        bookableDate = convertBookableDate,
-        ticketAmount = ticketAmount,
-        price = price,
-        place = place,
-        category = category,
-        user = user,
-    )
-}
-
-private fun Goods.toResponse(): GoodsResponse {
-    return GoodsResponse(
-        id = id!!,
-        title = title,
-        place = place,
-        runningTime = runningTime,
-        bookableDate = bookableDate,
-        date = date,
-        ticketAmount = ticketAmount,
-        // TODO availableTicketAmount
-        availableTicketAmount = 1,
-        price = price
-    )
 }
