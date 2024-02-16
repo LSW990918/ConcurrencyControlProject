@@ -4,9 +4,11 @@ import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
 import com.a03.concurrencycontrolproject.domain.ticket.service.TicketService
+import io.swagger.v3.oas.annotations.Operation
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
@@ -16,6 +18,7 @@ class TicketController(
     private val ticketService: TicketService
 ) {
 
+    @Operation(summary = "티켓 생성")
     @PostMapping
     fun createTicket(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
@@ -26,6 +29,7 @@ class TicketController(
             .body(ticketService.createTicket(userPrincipal.id, request))
     }
 
+    @Operation(summary = "티켓 취소")
     @DeleteMapping("/{ticketId}")
     fun deleteTicket(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
@@ -36,6 +40,7 @@ class TicketController(
             .body(ticketService.deleteTicket(userPrincipal.id, ticketId))
     }
 
+    @Operation(summary = "유저의 티켓 목록 조회")
     @GetMapping("/mine")
     fun getTicketOfMember(
         @AuthenticationPrincipal userPrincipal: UserPrincipal
@@ -45,7 +50,9 @@ class TicketController(
             .body(ticketService.getTicketOfMember(userPrincipal.id))
     }
 
+    @Operation(summary = "굿즈의 예매된 티켓 목록 조회")
     @GetMapping()
+    @PreAuthorize("hasAnyRole('ADMIN','SELLER')")
     fun getTicketOfGoods(
         @RequestParam goodsId: Long
     ): ResponseEntity<List<TicketResponse>> {
