@@ -13,7 +13,6 @@ import org.hibernate.annotations.SQLRestriction
 @Table(name = "review")
 @SQLDelete(sql = "Update goods SET is_deleted = true WHERE id = ?")
 @SQLRestriction("is_deleted = false")
-@OnDelete(action = OnDeleteAction.CASCADE)
 class Review(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,9 +29,11 @@ class Review(
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val user: User,
 
     @ManyToOne@JoinColumn(name = "goods_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val goods: Goods
 
 ):BaseTime() {

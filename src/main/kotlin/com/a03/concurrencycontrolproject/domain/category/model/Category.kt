@@ -8,7 +8,6 @@ import org.hibernate.annotations.*
 @Entity
 @SQLDelete(sql = "UPDATE category SET is_deleted = true WHERE id = ?") // DELETE 쿼리 날아올 시 대신 실행
 @SQLRestriction("is_deleted = false")
-@OnDelete(action = OnDeleteAction.CASCADE)
 @Table(name = "category")
 class Category(
 
