@@ -59,7 +59,7 @@ class UserController(
         @RequestParam userRole: UserRole,
        @Valid @RequestBody request: SignupRequest
     ): ResponseEntity<UserResponse> {
-        userService.signup(request)
+        userService.signup(userRole, request)
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .build()
