@@ -13,9 +13,9 @@ class Ticket(
 //    @JoinColumn(name = "user_id")
 //    val user: User,
 
-//    @ManyToOne
-//    @JoinColumn(name = "goods_id")
-//    val goods: Goods
+    @ManyToOne
+    @JoinColumn(name = "goods_id")
+    val goods: Goods
 ): BaseTime() {
 
     @Id

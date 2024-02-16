@@ -1,5 +1,8 @@
 package com.a03.concurrencycontrolproject.domain.goods.dto
 
+import com.a03.concurrencycontrolproject.domain.category.model.Category
+import com.a03.concurrencycontrolproject.domain.goods.model.Goods
+import com.a03.concurrencycontrolproject.domain.user.model.User
 import jakarta.validation.constraints.Pattern
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -36,6 +39,20 @@ data class CreateGoodsRequest(
     private fun convertStringToLocalDateTime(date: String): LocalDateTime {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         return LocalDateTime.parse(date, formatter)
+    }
+
+    fun to(category: Category, user: User): Goods {
+        return Goods(
+            title = title,
+            runningTime = runningTime,
+            date = convertDate,
+            bookableDate = convertBookableDate,
+            ticketAmount = ticketAmount,
+            price = price,
+            place = place,
+            category = category,
+            user = user,
+        )
     }
 
 }
