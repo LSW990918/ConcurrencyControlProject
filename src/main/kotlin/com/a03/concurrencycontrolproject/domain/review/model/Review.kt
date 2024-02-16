@@ -1,12 +1,13 @@
 package com.a03.concurrencycontrolproject.domain.review.model
 
 import com.a03.concurrencycontrolproject.common.BaseTime
+import com.a03.concurrencycontrolproject.domain.goods.model.Goods
+import com.a03.concurrencycontrolproject.domain.user.model.User
 import jakarta.persistence.*
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
-import org.hibernate.annotations.processing.SQL
 
 @Entity
 @Table(name = "review")

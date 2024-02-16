@@ -1,30 +1,36 @@
 package com.a03.concurrencycontrolproject.domain.review.service
 
+import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
+import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
 import com.a03.concurrencycontrolproject.domain.review.dto.CreateReviewRequest
 import com.a03.concurrencycontrolproject.domain.review.dto.ReviewResponse
 import com.a03.concurrencycontrolproject.domain.review.dto.UpdateReviewRequest
 import com.a03.concurrencycontrolproject.domain.review.repository.ReviewRepository
+import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
 class ReviewService(
     private val goodsRepository: GoodsRepository,
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val userRepository: UserRepository
 ) {
-    fun createReview(createReviewRequest: CreateReviewRequest, user: User) {
-        check(!goodsRepository.findByIdOrNull(createReviewRequest.goodsId)) { throw IllegalArgumentException() }
+    fun createReview(createReviewRequest: CreateReviewRequest, userPrincipal: UserPrincipal) {
+        goodsRepository.findByIdOrNull(createReviewRequest.goodsId) ?:throw IllegalArgumentException()
 
-        val goods = goodsRepository.findByIdOrNull(createReviewRequest.goodsId)
+        val user = userRepository.findByIdOrNull(userPrincipal.id) ?: throw Exception()
+        val goods = goodsRepository.findByIdOrNull(createReviewRequest.goodsId) ?: throw Exception()
 
         reviewRepository.save(createReviewRequest.to(goods, user))
     }
 
 
-    fun updateReview(updateReviewRequest: UpdateReviewRequest, user: User) {
-        check(!goodsRepository.findByIdOrNull(updateReviewRequest.goodsId)) { throw IllegalArgumentException() }
+    fun updateReview(updateReviewRequest: UpdateReviewRequest, userPrincipal: UserPrincipal) {
+        goodsRepository.findByIdOrNull(updateReviewRequest.goodsId) ?: throw IllegalArgumentException()
 
-        val goods = goodsRepository.findByIdOrNull(updateReviewRequest.goodsId)
+        val user = userRepository.findByIdOrNull(userPrincipal.id) ?: throw Exception()
+        val goods = goodsRepository.findByIdOrNull(updateReviewRequest.goodsId) ?: throw Exception()
         val review = reviewRepository.findByIdOrNull(updateReviewRequest.id) ?: throw Exception()
 
         review.checkAuthorization(user)
@@ -33,12 +39,13 @@ class ReviewService(
 
 
     fun getReviewList(goodsId: Long): List<ReviewResponse> {
-        check(!goodsRepository.findByIdOrNull(goodsId)) { throw IllegalArgumentException() }
+        goodsRepository.findByIdOrNull(goodsId) ?: throw IllegalArgumentException()
         return reviewRepository.findReviewsByGoodsId(goodsId)
     }
 
 
-    fun deleteReview(goodsId: Long, reviewId: Long, user: User) {
+    fun deleteReview(goodsId: Long, reviewId: Long, userPrincipal: UserPrincipal) {
+        val user = userRepository.findByIdOrNull(userPrincipal.id) ?: throw Exception()
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw  IllegalArgumentException()
 
         review.checkAuthorization(user)
