@@ -5,6 +5,7 @@ import com.a03.concurrencycontrolproject.domain.goods.dto.CreateGoodsRequest
 import com.a03.concurrencycontrolproject.domain.goods.dto.GoodsResponse
 import com.a03.concurrencycontrolproject.domain.goods.dto.UpdateGoodsRequest
 import com.a03.concurrencycontrolproject.domain.goods.service.GoodsService
+import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,6 +20,7 @@ class GoodsController(
     val goodsService: GoodsService
 ) {
 
+    @Operation(summary = "상품 생성")
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','SELLER')")
     fun createGoods(
@@ -35,6 +37,7 @@ class GoodsController(
             .build()
     }
 
+    @Operation(summary = "상품 수정")
     @PutMapping("/{goodsId}")
     @PreAuthorize("hasAnyRole('ADMIN','SELLER')")
     fun updateGoods(
@@ -52,6 +55,7 @@ class GoodsController(
         }
     }
 
+    @Operation(summary = "상품 삭제")
     @DeleteMapping("/{goodsId}")
     @PreAuthorize("hasAnyRole('ADMIN','SELLER')")
     fun deleteGoods(
@@ -66,6 +70,7 @@ class GoodsController(
         }
     }
 
+    @Operation(summary = "상품 목록 조회")
     @GetMapping
     fun getGoodsList(
         @PathVariable categoryId: Long,
@@ -77,6 +82,7 @@ class GoodsController(
         }
     }
 
+    @Operation(summary = "상품 조회")
     @GetMapping("/{goodsId}")
     fun getGoods(
         @PathVariable categoryId: Long,
