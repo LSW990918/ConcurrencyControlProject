@@ -8,10 +8,10 @@ data class CategoryResponse(
 
 ) {
     companion object {
-        fun Category.toResponse(): CategoryResponse {
+        fun from(category: Category): CategoryResponse {
             return CategoryResponse(
-                id = id!!,
-                title = title
+                id = category.id!!,
+                title = category.title
             )
         }
     }
