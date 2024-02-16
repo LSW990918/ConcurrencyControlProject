@@ -23,7 +23,11 @@ class Ticket(
     @ManyToOne
     @JoinColumn(name = "goods_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    val goods: Goods
+    val goods: Goods,
+
+    @Column(name = "is_deleted", nullable = false)
+    val isDeleted: Boolean = false
+
 ): BaseTime() {
 
     @Id

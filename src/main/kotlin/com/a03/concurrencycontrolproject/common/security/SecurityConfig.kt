@@ -39,8 +39,8 @@ class SecurityConfig(
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling {
-                it.authenticationEntryPoint(authenticationEntryPoint)
-                it.accessDeniedHandler(accessDeniedHandler)
+//                it.authenticationEntryPoint(authenticationEntryPoint)
+//                it.accessDeniedHandler(accessDeniedHandler)
             }
             .build()
     }
