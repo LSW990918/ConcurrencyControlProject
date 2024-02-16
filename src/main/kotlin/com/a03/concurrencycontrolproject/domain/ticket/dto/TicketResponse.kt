@@ -1,20 +1,21 @@
 package com.a03.concurrencycontrolproject.domain.ticket.dto
 
-import com.a03.concurrencycontrolproject.domain.goods.model.Goods
+import com.a03.concurrencycontrolproject.domain.goods.dto.GoodsResponse
 import com.a03.concurrencycontrolproject.domain.ticket.model.Ticket
-import com.a03.concurrencycontrolproject.domain.user.model.User
+import com.a03.concurrencycontrolproject.domain.user.dto.UserResponse
 
 class TicketResponse(
     val id: Long,
-    val goods: Goods,
-    val user: User,
+    val goods: GoodsResponse,
+    val user: UserResponse,
 ) {
-    fun to(ticket: Ticket): TicketResponse {
-        return TicketResponse(
-            id = ticket.id!!,
-            goods = ticket.goods,
-            user = ticket.user
-        )
+    companion object {
+        fun from(ticket: Ticket): TicketResponse {
+            return TicketResponse(
+                id = ticket.id!!,
+                goods = GoodsResponse.from(ticket.goods),
+                user = UserResponse.from(ticket.user)
+            )
+        }
     }
-
 }
