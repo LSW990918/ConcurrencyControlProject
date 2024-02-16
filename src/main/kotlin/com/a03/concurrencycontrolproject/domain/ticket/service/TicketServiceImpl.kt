@@ -2,11 +2,9 @@ package com.a03.concurrencycontrolproject.domain.ticket.service
 
 import com.a03.concurrencycontrolproject.common.exception.AccessDeniedException
 import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
-import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
-import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse.Companion.toResponse
 import com.a03.concurrencycontrolproject.domain.ticket.model.Ticket
 import com.a03.concurrencycontrolproject.domain.ticket.repository.TicketRepository
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
@@ -42,12 +40,12 @@ class TicketServiceImpl(
     override fun getTicketOfMember(userId: Long): List<TicketResponse> {
         val ticketList = ticketRepository.findAllByUserId(userId)
             ?: throw ModelNotFoundException("TicketList", userId)
-        return ticketList.map { it.toResponse() }
+        return ticketList.map { TicketResponse.from(it) }
     }
 
     override fun getTicketOfGoods(goodsId: Long): List<TicketResponse> {
         val ticketList = ticketRepository.findAllByGoodsId(goodsId)
             ?: throw ModelNotFoundException("TicketList", goodsId)
-        return ticketList.map { it.toResponse() }
+        return ticketList.map { TicketResponse.from(it) }
     }
 }
