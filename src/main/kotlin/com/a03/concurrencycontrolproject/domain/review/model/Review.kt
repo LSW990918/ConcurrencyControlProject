@@ -11,7 +11,7 @@ import org.hibernate.annotations.SQLRestriction
 
 @Entity
 @Table(name = "review")
-@SQLDelete(sql = "Update goods SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "Update review SET is_deleted = true WHERE id = ?")
 @SQLRestriction("is_deleted = false")
 class Review(
     @Id

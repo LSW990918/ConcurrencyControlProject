@@ -1,5 +1,6 @@
 package com.a03.concurrencycontrolproject.domain.review.service
 
+import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
 import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
 import com.a03.concurrencycontrolproject.domain.review.dto.CreateReviewRequest
@@ -17,21 +18,17 @@ class ReviewService(
     private val userRepository: UserRepository
 ) {
     fun createReview(createReviewRequest: CreateReviewRequest, userPrincipal: UserPrincipal) {
-        goodsRepository.findByIdOrNull(createReviewRequest.goodsId) ?:throw IllegalArgumentException()
-
-        val user = userRepository.findByIdOrNull(userPrincipal.id) ?: throw Exception()
-        val goods = goodsRepository.findByIdOrNull(createReviewRequest.goodsId) ?: throw Exception()
+        val user = userRepository.findByIdOrNull(userPrincipal.id) ?: throw ModelNotFoundException("User", userPrincipal.id)
+        val goods = goodsRepository.findByIdOrNull(createReviewRequest.goodsId) ?: throw ModelNotFoundException("Goods", createReviewRequest.goodsId)
 
         reviewRepository.save(createReviewRequest.to(goods, user))
     }
 
 
     fun updateReview(updateReviewRequest: UpdateReviewRequest, userPrincipal: UserPrincipal) {
-        goodsRepository.findByIdOrNull(updateReviewRequest.goodsId) ?: throw IllegalArgumentException()
-
-        val user = userRepository.findByIdOrNull(userPrincipal.id) ?: throw Exception()
-        val goods = goodsRepository.findByIdOrNull(updateReviewRequest.goodsId) ?: throw Exception()
-        val review = reviewRepository.findByIdOrNull(updateReviewRequest.id) ?: throw Exception()
+        val user = userRepository.findByIdOrNull(userPrincipal.id) ?: throw ModelNotFoundException("User", userPrincipal.id)
+        val goods = goodsRepository.findByIdOrNull(updateReviewRequest.goodsId) ?: throw ModelNotFoundException("Goods", updateReviewRequest.goodsId)
+        val review = reviewRepository.findByIdOrNull(updateReviewRequest.id) ?: throw ModelNotFoundException("Review", updateReviewRequest.id)
 
         review.checkAuthorization(user)
         reviewRepository.save(updateReviewRequest.to(goods, user))
@@ -39,14 +36,14 @@ class ReviewService(
 
 
     fun getReviewList(goodsId: Long): List<ReviewResponse> {
-        goodsRepository.findByIdOrNull(goodsId) ?: throw IllegalArgumentException()
+        goodsRepository.findByIdOrNull(goodsId) ?: throw ModelNotFoundException("Goods", goodsId)
         return reviewRepository.findReviewsByGoodsId(goodsId)
     }
 
 
-    fun deleteReview(goodsId: Long, reviewId: Long, userPrincipal: UserPrincipal) {
-        val user = userRepository.findByIdOrNull(userPrincipal.id) ?: throw Exception()
-        val review = reviewRepository.findByIdOrNull(reviewId) ?: throw  IllegalArgumentException()
+    fun deleteReview(reviewId: Long, userPrincipal: UserPrincipal) {
+        val user = userRepository.findByIdOrNull(userPrincipal.id) ?: throw ModelNotFoundException("User", userPrincipal.id)
+        val review = reviewRepository.findByIdOrNull(reviewId) ?: throw  ModelNotFoundException("Review", reviewId)
 
         review.checkAuthorization(user)
 
