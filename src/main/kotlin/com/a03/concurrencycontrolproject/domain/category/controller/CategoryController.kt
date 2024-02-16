@@ -4,6 +4,7 @@ import com.a03.concurrencycontrolproject.domain.category.dto.CategoryResponse
 import com.a03.concurrencycontrolproject.domain.category.dto.CreateCategoryRequest
 import com.a03.concurrencycontrolproject.domain.category.dto.UpdateCategoryRequest
 import com.a03.concurrencycontrolproject.domain.category.service.CategoryService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -23,7 +24,7 @@ class CategoryController(
 
     @PostMapping
     fun createCategory(
-        @RequestBody request: CreateCategoryRequest
+        @Valid @RequestBody request: CreateCategoryRequest
     ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
@@ -33,7 +34,7 @@ class CategoryController(
     @PutMapping("/{categoryId}")
     fun updateCategory(
         @PathVariable categoryId: Long,
-        @RequestBody request: UpdateCategoryRequest
+        @Valid @RequestBody request: UpdateCategoryRequest
     ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.OK)
