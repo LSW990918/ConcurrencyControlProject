@@ -1,5 +1,6 @@
 package com.a03.concurrencycontrolproject.domain.category.service
 
+import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
 import com.a03.concurrencycontrolproject.domain.category.dto.CategoryResponse
 import com.a03.concurrencycontrolproject.domain.category.dto.CategoryResponse.Companion.toResponse
 import com.a03.concurrencycontrolproject.domain.category.dto.CreateCategoryRequest
@@ -23,13 +24,13 @@ class CategoryServiceImpl(
 
     override fun updateCategory(categoryId: Long, request: UpdateCategoryRequest){
         val category = categoryRepository.findByIdOrNull(categoryId)
-            ?: throw Exception()
+            ?: throw ModelNotFoundException("Category", categoryId)
         category.title = request.title
     }
 
     override fun deleteCategory(categoryId: Long) {
         val category = categoryRepository.findByIdOrNull(categoryId)
-            ?: throw Exception()
+            ?: throw ModelNotFoundException("Category", categoryId)
         categoryRepository.delete(category)
     }
 
@@ -40,7 +41,7 @@ class CategoryServiceImpl(
 
     override fun getCategory(categoryId: Long): CategoryResponse {
         val category = categoryRepository.findByIdOrNull(categoryId)
-            ?: throw Exception()
+            ?: throw ModelNotFoundException("Category", categoryId)
         return category.toResponse()
     }
 
