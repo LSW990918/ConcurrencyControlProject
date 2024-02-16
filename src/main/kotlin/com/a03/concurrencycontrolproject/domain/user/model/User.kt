@@ -45,12 +45,6 @@ class User(
         email = request.email
         password = request.password
         nickname = request.nickname
-        role =  when (request.role) {
-            "ADMIN" -> UserRole.ADMIN
-            "SELLER" -> UserRole.SELLER
-            "MEMBER" -> UserRole.MEMBER
-            else  -> throw NotExistRoleException(request.role)
-        }
     }
 }
 
