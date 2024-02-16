@@ -45,22 +45,7 @@ class User(
         email = request.email
         password = request.password
         nickname = request.nickname
-        role =  when (request.role) {
-            "ADMIN" -> UserRole.ADMIN
-            "SELLER" -> UserRole.SELLER
-            "MEMBER" -> UserRole.MEMBER
-            else  -> throw NotExistRoleException(request.role)
-        }
     }
-}
-
-fun User.toResponse(): UserResponse {
-    return UserResponse(
-        id = id!!,
-        email = email,
-        nickname = nickname,
-        role = role.name
-    )
 }
 
 fun checkedEmailOrNicknameExists(email: String, nickname: String, userRepository: UserRepository) {

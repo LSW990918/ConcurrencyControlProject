@@ -1,7 +1,7 @@
 package com.a03.concurrencycontrolproject.domain.category.service
 
+import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
 import com.a03.concurrencycontrolproject.domain.category.dto.CategoryResponse
-import com.a03.concurrencycontrolproject.domain.category.dto.CategoryResponse.Companion.toResponse
 import com.a03.concurrencycontrolproject.domain.category.dto.CreateCategoryRequest
 import com.a03.concurrencycontrolproject.domain.category.dto.UpdateCategoryRequest
 import com.a03.concurrencycontrolproject.domain.category.model.Category
@@ -21,27 +21,27 @@ class CategoryServiceImpl(
         categoryRepository.save(category)
     }
 
-    override fun updateCategory(categoryId: Long, request: UpdateCategoryRequest){
+    override fun updateCategory(categoryId: Long, request: UpdateCategoryRequest) {
         val category = categoryRepository.findByIdOrNull(categoryId)
-            ?: throw Exception()
+            ?: throw ModelNotFoundException("Category", categoryId)
         category.title = request.title
     }
 
     override fun deleteCategory(categoryId: Long) {
         val category = categoryRepository.findByIdOrNull(categoryId)
-            ?: throw Exception()
+            ?: throw ModelNotFoundException("Category", categoryId)
         categoryRepository.delete(category)
     }
 
     override fun getCategoryList(): List<CategoryResponse> {
         val categoryList = categoryRepository.findAll()
-        return categoryList.map { it.toResponse() }
+        return categoryList.map { CategoryResponse.from(it) }
     }
 
     override fun getCategory(categoryId: Long): CategoryResponse {
         val category = categoryRepository.findByIdOrNull(categoryId)
-            ?: throw Exception()
-        return category.toResponse()
+            ?: throw ModelNotFoundException("Category", categoryId)
+        return CategoryResponse.from(category)
     }
 
 }

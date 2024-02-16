@@ -42,7 +42,7 @@ class UserController(
         @PathVariable userId: Long,
         @RequestBody request: UpdateProfileRequest,
         @AuthenticationPrincipal userPrincipal: UserPrincipal
-    ): ResponseEntity<UserResponse> {
+    ): ResponseEntity<Unit> {
         if (userId == userPrincipal.id) {
             userService.updateProfile(userId, request)
         } else {
@@ -58,11 +58,10 @@ class UserController(
     fun signup(
         @RequestParam userRole: UserRole,
        @Valid @RequestBody request: SignupRequest
-    ): ResponseEntity<UserResponse> {
-        userService.signup(userRole ,request)
+    ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .build()
+            .body(userService.signup(userRole ,request))
     }
 
     @Operation(summary = "로그인")
