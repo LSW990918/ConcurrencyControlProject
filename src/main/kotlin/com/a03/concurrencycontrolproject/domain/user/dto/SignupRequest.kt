@@ -28,8 +28,6 @@ data class SignupRequest(
     )
     @JsonProperty("nickname")
     private val _nickname: String?,
-
-    val role: String,
 ) {
     val email: String
         get() = _email!!
