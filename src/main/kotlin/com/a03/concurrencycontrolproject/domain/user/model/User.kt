@@ -5,6 +5,9 @@ import com.a03.concurrencycontrolproject.common.exception.EmailAlreadyExistExcep
 import com.a03.concurrencycontrolproject.common.exception.NicknameAlreadyExistException
 import com.a03.concurrencycontrolproject.common.exception.NotExistRoleException
 import com.a03.concurrencycontrolproject.common.exception.WrongEmailOrPasswordException
+import com.a03.concurrencycontrolproject.domain.goods.model.Goods
+import com.a03.concurrencycontrolproject.domain.review.model.Review
+import com.a03.concurrencycontrolproject.domain.ticket.model.Ticket
 import com.a03.concurrencycontrolproject.domain.user.dto.UpdateProfileRequest
 import com.a03.concurrencycontrolproject.domain.user.dto.UserResponse
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
@@ -46,6 +49,15 @@ class User(
         password = request.password
         nickname = request.nickname
     }
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    var goods: MutableList<Goods> = mutableListOf()
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    var review: MutableList<Review> = mutableListOf()
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    var ticket: MutableList<Ticket> = mutableListOf()
 }
 
 fun checkedEmailOrNicknameExists(email: String, nickname: String, userRepository: UserRepository) {
