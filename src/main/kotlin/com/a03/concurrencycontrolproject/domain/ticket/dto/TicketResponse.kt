@@ -9,13 +9,12 @@ class TicketResponse(
     val goods: Goods,
     val user: User,
 ) {
-    companion object {
-        fun Ticket.toResponse(): TicketResponse {
-            return TicketResponse(
-                id = id!!,
-                goods = goods,
-                user = user
-            )
-        }
+    fun to(ticket: Ticket): TicketResponse {
+        return TicketResponse(
+            id = ticket.id!!,
+            goods = ticket.goods,
+            user = ticket.user
+        )
     }
+
 }
