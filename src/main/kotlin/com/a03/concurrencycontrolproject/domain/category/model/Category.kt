@@ -1,7 +1,10 @@
 package com.a03.concurrencycontrolproject.domain.category.model
 
 import com.a03.concurrencycontrolproject.common.BaseTime
+import com.a03.concurrencycontrolproject.domain.goods.model.Goods
+import com.a03.concurrencycontrolproject.domain.user.model.User
 import jakarta.persistence.*
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Table
 import org.hibernate.annotations.*
 
@@ -15,7 +18,23 @@ class Category(
     var title: String,
 
     @Column(name = "is_deleted")
-    val isDeleted: Boolean = false
+    val isDeleted: Boolean = false,
+
+    @OneToMany(
+        mappedBy = "category",
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true
+    )
+    val goodsList: MutableList<Goods> = mutableListOf(),
+
+    @OneToMany(
+        mappedBy = "category",
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true
+    )
+    val userList: MutableList<User> = mutableListOf()
 
 ) : BaseTime() {
 

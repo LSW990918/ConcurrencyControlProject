@@ -33,12 +33,10 @@ class Goods(
     val place: String,
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "category_id")
     var category: Category,
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
     val user: User,
 ) : BaseTime() {
