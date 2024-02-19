@@ -8,8 +8,11 @@ import com.a03.concurrencycontrolproject.domain.review.dto.ReviewResponse
 import com.a03.concurrencycontrolproject.domain.review.dto.UpdateReviewRequest
 import com.a03.concurrencycontrolproject.domain.review.repository.ReviewRepository
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ReviewService(
@@ -25,6 +28,7 @@ class ReviewService(
     }
 
 
+    @Transactional
     fun updateReview(updateReviewRequest: UpdateReviewRequest, userPrincipal: UserPrincipal) {
         val user = userRepository.findByIdOrNull(userPrincipal.id) ?: throw ModelNotFoundException("User", userPrincipal.id)
         val goods = goodsRepository.findByIdOrNull(updateReviewRequest.goodsId) ?: throw ModelNotFoundException("Goods", updateReviewRequest.goodsId)
@@ -35,9 +39,9 @@ class ReviewService(
     }
 
 
-    fun getReviewList(goodsId: Long): List<ReviewResponse> {
+    fun getReviewList(goodsId: Long, pageable: Pageable): Page<ReviewResponse> {
         goodsRepository.findByIdOrNull(goodsId) ?: throw ModelNotFoundException("Goods", goodsId)
-        return reviewRepository.findReviewsByGoodsId(goodsId)
+        return reviewRepository.findReviewsByGoodsId(goodsId, pageable).map { ReviewResponse.from(it) }
     }
 
 
@@ -49,6 +53,5 @@ class ReviewService(
 
         reviewRepository.delete(review)
     }
-
 
 }

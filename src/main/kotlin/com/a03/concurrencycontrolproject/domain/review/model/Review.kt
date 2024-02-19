@@ -32,7 +32,8 @@ class Review(
     @OnDelete(action = OnDeleteAction.CASCADE)
     val user: User,
 
-    @ManyToOne@JoinColumn(name = "goods_id")
+    @ManyToOne
+    @JoinColumn(name = "goods_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     val goods: Goods
 
