@@ -2,6 +2,7 @@ package com.a03.concurrencycontrolproject.domain.ticket.service
 
 import com.a03.concurrencycontrolproject.common.exception.AccessDeniedException
 import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
+import com.a03.concurrencycontrolproject.domain.goods.model.Goods
 import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
@@ -27,6 +28,9 @@ class TicketServiceImpl(
             goods = goods,
             user = user
         )
+        if (goods.ticketAmount - goods.ticket.size <= 0) {
+            throw RuntimeException()
+        }
         ticketRepository.save(ticket)
     }
 
