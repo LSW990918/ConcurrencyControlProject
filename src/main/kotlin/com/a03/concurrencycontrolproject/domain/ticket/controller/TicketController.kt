@@ -51,13 +51,14 @@ class TicketController(
     }
 
     @Operation(summary = "굿즈의 예매된 티켓 목록 조회")
-    @GetMapping()
-    @PreAuthorize("hasAnyRole('ADMIN','SELLER')")
+    @GetMapping
+    @PreAuthorize("hasAnyRole('SELLER')")
     fun getTicketOfGoods(
-        @RequestParam goodsId: Long
+        @RequestParam goodsId: Long,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<List<TicketResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(ticketService.getTicketOfGoods(goodsId))
+            .body(ticketService.getTicketOfGoods(goodsId, userPrincipal.id))
     }
 }
