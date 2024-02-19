@@ -1,26 +1,27 @@
 package com.a03.concurrencycontrolproject.domain.goods.service
 
 import com.a03.concurrencycontrolproject.common.exception.AccessDeniedException
+import com.a03.concurrencycontrolproject.common.exception.IllegalDateStateException
 import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
-import com.a03.concurrencycontrolproject.domain.category.model.Category
 import com.a03.concurrencycontrolproject.domain.category.repository.CategoryRepository
 import com.a03.concurrencycontrolproject.domain.goods.dto.CreateGoodsRequest
 import com.a03.concurrencycontrolproject.domain.goods.dto.GoodsResponse
+import com.a03.concurrencycontrolproject.domain.goods.dto.SelectGoodsRequest
 import com.a03.concurrencycontrolproject.domain.goods.dto.UpdateGoodsRequest
-import com.a03.concurrencycontrolproject.domain.goods.model.Goods
 import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
-import com.a03.concurrencycontrolproject.domain.user.model.User
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRole
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class GoodsServiceImpl(
-    val goodsRepository: GoodsRepository,
-    val categoryRepository: CategoryRepository,
-    val userRepository: UserRepository,
+    private val goodsRepository: GoodsRepository,
+    private val categoryRepository: CategoryRepository,
+    private val userRepository: UserRepository,
 ) : GoodsService {
 
     @Transactional
@@ -31,6 +32,15 @@ class GoodsServiceImpl(
 
         val user = userRepository.findByIdOrNull(request.userId)
             ?: throw ModelNotFoundException("User", request.userId)
+
+        if (request.date < request.bookableDate) {
+            throw IllegalDateStateException(
+                "BookableDate",
+                "Date",
+                request.bookableDate.toString(),
+                request.date.toString()
+            )
+        }
 
         goodsRepository.save(request.to(category, user))
     }
@@ -72,11 +82,16 @@ class GoodsServiceImpl(
         goodsRepository.delete(goods)
     }
 
-    override fun getGoodsList(categoryId: Long): List<GoodsResponse> {
-        categoryRepository.findByIdOrNull(categoryId)
-            ?: throw ModelNotFoundException("Category", categoryId)
+    override fun getGoodsList(pageable: Pageable, selectGoodsRequest: SelectGoodsRequest): Page<GoodsResponse> {
+        categoryRepository.findByIdOrNull(selectGoodsRequest.categoryId)
+            ?: throw ModelNotFoundException("Category", selectGoodsRequest.categoryId)
 
-        return goodsRepository.findByCategoryId(categoryId).map { GoodsResponse.from(it) }
+        return goodsRepository.findByPageableAndCategoryIdAndTitleAndPlace(
+            pageable = pageable,
+            categoryId = selectGoodsRequest.categoryId,
+            title = selectGoodsRequest.title,
+            place = selectGoodsRequest.place
+        ).map { GoodsResponse.from(it) }
     }
 
     override fun getGoods(goodsId: Long): GoodsResponse {
