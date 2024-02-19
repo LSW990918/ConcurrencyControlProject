@@ -6,6 +6,7 @@ import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
 import com.a03.concurrencycontrolproject.domain.ticket.model.Ticket
+import com.a03.concurrencycontrolproject.domain.ticket.model.accessUser
 import com.a03.concurrencycontrolproject.domain.ticket.repository.TicketRepository
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -36,16 +37,21 @@ class TicketServiceImpl(
         ticketRepository.delete(ticket)
     }
 
-    //아래 예외처리 수정 필요함
     override fun getTicketOfMember(userId: Long): List<TicketResponse> {
         val ticketList = ticketRepository.findAllByUserId(userId)
             ?: throw ModelNotFoundException("TicketList", userId)
+        val ticketUser = ticketRepository.findByUserId(userId)
+            ?: throw ModelNotFoundException("Ticket",userId)
+        accessUser(userId, ticketUser.user.id!!)
         return ticketList.map { TicketResponse.from(it) }
     }
 
-    override fun getTicketOfGoods(goodsId: Long): List<TicketResponse> {
+    override fun getTicketOfGoods(goodsId: Long, userId: Long): List<TicketResponse> {
         val ticketList = ticketRepository.findAllByGoodsId(goodsId)
             ?: throw ModelNotFoundException("TicketList", goodsId)
+        val goods = goodsRepository.findByIdOrNull(goodsId)
+            ?: throw ModelNotFoundException("Goods", goodsId)
+        accessUser(goods.user.id!!, userId)
         return ticketList.map { TicketResponse.from(it) }
     }
 }

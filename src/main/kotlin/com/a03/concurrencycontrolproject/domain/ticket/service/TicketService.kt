@@ -12,5 +12,5 @@ interface TicketService {
 
     fun getTicketOfMember(userId: Long): List<TicketResponse>
 
-    fun getTicketOfGoods(goodsId: Long): List<TicketResponse>
+    fun getTicketOfGoods(goodsId: Long, userId: Long): List<TicketResponse>
 }
