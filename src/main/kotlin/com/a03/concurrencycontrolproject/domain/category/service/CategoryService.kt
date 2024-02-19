@@ -3,6 +3,8 @@ package com.a03.concurrencycontrolproject.domain.category.service
 import com.a03.concurrencycontrolproject.domain.category.dto.CategoryResponse
 import com.a03.concurrencycontrolproject.domain.category.dto.CreateCategoryRequest
 import com.a03.concurrencycontrolproject.domain.category.dto.UpdateCategoryRequest
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 
 interface CategoryService {
 
@@ -15,4 +17,6 @@ interface CategoryService {
     fun getCategoryList() : List<CategoryResponse>
 
     fun getCategory(categoryId: Long) : CategoryResponse
+
+    fun getPaginatedCategoryList(pageable: Pageable, status: String?): Page<CategoryResponse>?
 }

@@ -26,15 +26,7 @@ class Category(
         cascade = [CascadeType.ALL],
         orphanRemoval = true
     )
-    val goodsList: MutableList<Goods> = mutableListOf(),
-
-    @OneToMany(
-        mappedBy = "category",
-        fetch = FetchType.LAZY,
-        cascade = [CascadeType.ALL],
-        orphanRemoval = true
-    )
-    val userList: MutableList<User> = mutableListOf()
+    var goodsList: MutableList<Goods> = mutableListOf(),
 
 ) : BaseTime() {
 
