@@ -3,10 +3,14 @@ package com.a03.concurrencycontrolproject.domain.goods.controller
 import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.goods.dto.CreateGoodsRequest
 import com.a03.concurrencycontrolproject.domain.goods.dto.GoodsResponse
+import com.a03.concurrencycontrolproject.domain.goods.dto.SelectGoodsRequest
 import com.a03.concurrencycontrolproject.domain.goods.dto.UpdateGoodsRequest
 import com.a03.concurrencycontrolproject.domain.goods.service.GoodsService
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -17,7 +21,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/categories/{categoryId}/goods")
 class GoodsController(
-    val goodsService: GoodsService
+    private val goodsService: GoodsService
 ) {
 
     @Operation(summary = "상품 생성")
@@ -74,8 +78,16 @@ class GoodsController(
     @GetMapping
     fun getGoodsList(
         @PathVariable categoryId: Long,
-    ): ResponseEntity<List<GoodsResponse>> {
-        return goodsService.getGoodsList(categoryId).let {
+        @RequestParam title: String?,
+        @RequestParam place: String?,
+        @PageableDefault(size = 15, sort = ["id"]) pageable: Pageable,
+    ): ResponseEntity<Page<GoodsResponse>> {
+        return goodsService.getGoodsList(
+            pageable,
+            SelectGoodsRequest(
+                categoryId, title, place
+            )
+        ).let {
             ResponseEntity
                 .status(HttpStatus.OK)
                 .body(it)

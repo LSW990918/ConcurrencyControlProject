@@ -3,7 +3,6 @@ package com.a03.concurrencycontrolproject.common.exception
 import com.a03.concurrencycontrolproject.common.exception.dto.BaseResponse
 import com.a03.concurrencycontrolproject.common.exception.dto.ErrorResponse
 import com.a03.concurrencycontrolproject.common.exception.status.ResultCode
-import org.apache.coyote.Response
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.FieldError
@@ -16,6 +15,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler
     fun handleRuntimeException(e: RuntimeException): ResponseEntity<ErrorResponse> {
+        e.printStackTrace()
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(ErrorResponse(message = "Internal error"))
@@ -61,6 +61,12 @@ class GlobalExceptionHandler {
     fun handleAccessDeniedException(e: AccessDeniedException): ResponseEntity<ErrorResponse> {
         return ResponseEntity
             .status(HttpStatus.NOT_FOUND)
+            .body(ErrorResponse(e.message))
+    }
+    @ExceptionHandler(IllegalDateStateException::class)
+    fun handleIllegalStateDateException(e: IllegalDateStateException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
             .body(ErrorResponse(e.message))
     }
 
