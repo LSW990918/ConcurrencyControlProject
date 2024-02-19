@@ -6,6 +6,8 @@ import com.a03.concurrencycontrolproject.domain.review.dto.ReviewResponse
 import com.a03.concurrencycontrolproject.domain.review.dto.UpdateReviewRequest
 import com.a03.concurrencycontrolproject.domain.review.service.ReviewService
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/goods/{goodsId}/reviews")
 class ReviewController(
-    private val reviewService: ReviewService
+    private val reviewService: ReviewService,
 ) {
 
     @Operation(summary = "리뷰 생성")
@@ -39,8 +41,8 @@ class ReviewController(
 
     @Operation(summary = "리뷰 목록 조회")
     @GetMapping
-    fun getReviewList(@RequestParam goodsId: Long): ResponseEntity<List<ReviewResponse>> {
-        return ResponseEntity.status(HttpStatus.OK).body(reviewService.getReviewList(goodsId))
+    fun getReviewList(@RequestParam goodsId: Long, pageable: Pageable): ResponseEntity<Page<ReviewResponse>> {
+        return ResponseEntity.status(HttpStatus.OK).body(reviewService.getReviewList(goodsId, pageable))
     }
 
     @Operation(summary = "리뷰 삭제")
