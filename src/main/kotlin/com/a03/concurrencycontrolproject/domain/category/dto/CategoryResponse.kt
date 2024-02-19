@@ -6,7 +6,6 @@ import com.a03.concurrencycontrolproject.domain.goods.model.Goods
 data class CategoryResponse(
     val id: Long,
     val title: String,
-    val goods: List<Goods>
 
 ) {
     companion object {
@@ -14,7 +13,6 @@ data class CategoryResponse(
             return CategoryResponse(
                 id = category.id!!,
                 title = category.title,
-                goods = category.goodsList
             )
         }
     }

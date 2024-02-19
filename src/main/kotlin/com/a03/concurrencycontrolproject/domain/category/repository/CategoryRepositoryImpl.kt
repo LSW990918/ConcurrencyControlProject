@@ -2,7 +2,6 @@ package com.a03.concurrencycontrolproject.domain.category.repository
 
 import com.a03.concurrencycontrolproject.domain.category.model.Category
 import com.a03.concurrencycontrolproject.domain.category.model.QCategory
-import com.a03.concurrencycontrolproject.domain.goods.model.QGoods
 import com.a03.concurrencycontrolproject.infra.querydsl.QueryDslSupport
 import com.querydsl.core.types.Expression
 import com.querydsl.core.types.Order
@@ -20,9 +19,8 @@ class CategoryRepositoryImpl : QueryDslSupport(), CustomCategoryRepository {
 
         val totalCount = queryFactory.select(category.count()).from(category).fetchOne() ?: 0L
 
-        val goods = QGoods.goods
+
         val contents = queryFactory.select(category)
-            .leftJoin(category.goodsList, goods)
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
             .orderBy(*getOrderSpecifier(pageable, category))
