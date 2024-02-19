@@ -6,6 +6,8 @@ import com.a03.concurrencycontrolproject.domain.category.dto.CreateCategoryReque
 import com.a03.concurrencycontrolproject.domain.category.dto.UpdateCategoryRequest
 import com.a03.concurrencycontrolproject.domain.category.model.Category
 import com.a03.concurrencycontrolproject.domain.category.repository.CategoryRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -14,6 +16,7 @@ class CategoryServiceImpl(
     private val categoryRepository: CategoryRepository
 ) : CategoryService {
 
+    //생성, 수정, 삭제는 역할 ADMIN만 가능(Controller에서 역할 확인)
     override fun createCategory(request: CreateCategoryRequest) {
         val category = Category(
             title = request.title
@@ -33,6 +36,7 @@ class CategoryServiceImpl(
         categoryRepository.delete(category)
     }
 
+    //현재 getCategoryList는 getPaginatedCategoryList로 대체됨
     override fun getCategoryList(): List<CategoryResponse> {
         val categoryList = categoryRepository.findAll()
         return categoryList.map { CategoryResponse.from(it) }
@@ -42,6 +46,10 @@ class CategoryServiceImpl(
         val category = categoryRepository.findByIdOrNull(categoryId)
             ?: throw ModelNotFoundException("Category", categoryId)
         return CategoryResponse.from(category)
+    }
+
+    override fun getPaginatedCategoryList(pageable: Pageable, status: String?): Page<CategoryResponse>? {
+        return categoryRepository.findByPageable(pageable).map { CategoryResponse.from(it) }
     }
 
 }
