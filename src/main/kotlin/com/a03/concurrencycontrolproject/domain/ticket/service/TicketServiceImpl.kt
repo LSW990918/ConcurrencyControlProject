@@ -19,6 +19,8 @@ class TicketServiceImpl(
     private val goodsRepository: GoodsRepository,
     private val userRepository: UserRepository
 ): TicketService {
+
+    @Synchronized
     override fun createTicket(userId: Long, request: CreateTicketRequest) {
         val goods = goodsRepository.findByIdOrNull(request.goodsId)
             ?: throw ModelNotFoundException("Goods", request.goodsId)
@@ -29,7 +31,7 @@ class TicketServiceImpl(
             user = user
         )
         if (goods.ticketAmount - goods.ticket.size <= 0) {
-            throw RuntimeException()
+            throw ModelNotFoundException("ticket", 1)
         }
         ticketRepository.save(ticket)
     }

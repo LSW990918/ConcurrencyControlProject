@@ -47,7 +47,7 @@ class Goods(
     @Column(name = "is_deleted")
     var isDeleted: Boolean = false
 
-    @OneToMany(mappedBy = "goods", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "goods", fetch = FetchType.EAGER,cascade = [CascadeType.ALL], orphanRemoval = true)
     var ticket: MutableList<Ticket> = mutableListOf()
 
     @OneToMany(mappedBy = "goods", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
