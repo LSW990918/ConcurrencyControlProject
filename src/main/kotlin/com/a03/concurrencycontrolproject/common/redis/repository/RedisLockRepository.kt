@@ -8,17 +8,17 @@ import org.springframework.stereotype.Repository
 class RedisLockRepository(
     private val redisTemplate: RedisTemplate<String,String>
 ) {
-    fun lock(userId: Long): Boolean {
+    fun lock(id: Long): Boolean {
         return redisTemplate
             .opsForValue()
-            .setIfAbsent(generateKey(userId), "lock", java.time.Duration.ofMillis(3000))!!
+            .setIfAbsent(generateKey(id), "lock", java.time.Duration.ofMillis(3000))!!
     }
 
-    fun unlock(userId: Long): Boolean {
-        return redisTemplate.delete(generateKey(userId));
+    fun unlock(id: Long): Boolean {
+        return redisTemplate.delete(generateKey(id));
     }
 
-    private fun generateKey(userId: Long): String {
-        return userId.toString();
+    private fun generateKey(id: Long): String {
+        return id.toString();
     }
 }

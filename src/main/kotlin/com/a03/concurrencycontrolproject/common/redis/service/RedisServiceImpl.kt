@@ -14,7 +14,7 @@ class RedisServiceImpl(
     override fun createTicket(userId: Long, request: CreateTicketRequest) {
         try {
             // Lock 획득 시도
-            while (!redisLockRepository.lock(userId!!)) {
+            while (!redisLockRepository.lock(request.goodsId)) {
                 //SpinLock 방식이 redis 에게 주는 부하를 줄여주기위한 sleep
                 Thread.sleep(100)
             }
@@ -22,7 +22,7 @@ class RedisServiceImpl(
             ticketService.createTicket(userId, request)
         } finally {
             //락 해제
-            redisLockRepository.unlock(userId)
+            redisLockRepository.unlock(request.goodsId)
         }
     }
 }
