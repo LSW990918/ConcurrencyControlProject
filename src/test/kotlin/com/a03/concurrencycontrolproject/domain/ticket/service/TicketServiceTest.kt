@@ -97,7 +97,7 @@ class TicketServiceTest(
         println("fail : $fail")
 
         //then
-        Assertions.assertThat(success).isEqualTo(goods.ticketAmount)
-        Assertions.assertThat(fail).isEqualTo(threadCount - goods.ticketAmount)
+        Assertions.assertThat(success).isEqualTo(50)
+        Assertions.assertThat(fail).isEqualTo(50)
     }
 }
