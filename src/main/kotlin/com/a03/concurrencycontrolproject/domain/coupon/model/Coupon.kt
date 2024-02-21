@@ -9,22 +9,23 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "coupon")
 class Coupon(
-    @Column
+    @Column(name = "coupon_name")
     val couponName: String,
 
-    @Column
+    @Column(name = "coupon_number")
     var couponNumber: String,
 
-    @Column
+    @Column(name = "coupon_amount")
     var couponAmount: Long,
 
-    @Column
+    @Column(name = "coupon_available_date")
     val couponAvailableDate: LocalDateTime,
 
-    @Column
+    @Column(name = "coupon_expire_date")
     val couponExpireDate: LocalDateTime,
 
     @ManyToOne
+    @JoinColumn(name = "goods_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     val goods: Goods,
 
