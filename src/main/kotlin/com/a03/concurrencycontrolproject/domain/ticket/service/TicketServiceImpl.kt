@@ -12,7 +12,6 @@ import com.a03.concurrencycontrolproject.domain.ticket.repository.TicketReposito
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class TicketServiceImpl(

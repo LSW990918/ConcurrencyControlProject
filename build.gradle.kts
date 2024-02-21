@@ -73,7 +73,7 @@ dependencies {
     testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.3") // kotest 관련
     testImplementation("io.mockk:mockk:$mockkVersion") // mockk
     testImplementation("org.postgresql:postgresql")//테스트용 데이터소스URL
-    
+
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
 }
