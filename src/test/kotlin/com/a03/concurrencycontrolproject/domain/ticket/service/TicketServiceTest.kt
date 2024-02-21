@@ -6,6 +6,7 @@ import com.a03.concurrencycontrolproject.domain.category.repository.CategoryRepo
 import com.a03.concurrencycontrolproject.domain.goods.model.Goods
 import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
+import com.a03.concurrencycontrolproject.domain.ticket.exception.NotEnoughTicketException
 import com.a03.concurrencycontrolproject.domain.ticket.repository.TicketRepository
 import com.a03.concurrencycontrolproject.domain.user.model.User
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
@@ -65,6 +66,7 @@ class TicketServiceTest(
         val getGoods = goodsRepository.save(goods)
 
         val threadCount = 100
+
         val executorService = Executors.newFixedThreadPool(100)
         val countDownLatch = CountDownLatch(threadCount)
         val createTicketReq = CreateTicketRequest(goodsId = getGoods.id!!)
@@ -76,10 +78,9 @@ class TicketServiceTest(
             executorService.submit {
                 try {
                     ticketService.createTicket(user.id!!, createTicketReq)
-                    success++
-                } catch (e: ModelNotFoundException) {
-                    e.printStackTrace()
-                    fail++
+                    success += 1
+                } catch (e: NotEnoughTicketException) {
+                    fail += 1
                 } finally {
                     countDownLatch.countDown()
                 }
@@ -93,7 +94,7 @@ class TicketServiceTest(
         println("fail : $fail")
 
         //then
-        Assertions.assertThat(success).isEqualTo(50)
-        Assertions.assertThat(fail).isEqualTo(50)
+        Assertions.assertThat(success).isEqualTo(goods.ticketAmount)
+        Assertions.assertThat(fail).isEqualTo(threadCount - goods.ticketAmount)
     }
 }

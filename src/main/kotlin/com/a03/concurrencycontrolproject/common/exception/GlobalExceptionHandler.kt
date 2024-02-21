@@ -3,6 +3,7 @@ package com.a03.concurrencycontrolproject.common.exception
 import com.a03.concurrencycontrolproject.common.exception.dto.BaseResponse
 import com.a03.concurrencycontrolproject.common.exception.dto.ErrorResponse
 import com.a03.concurrencycontrolproject.common.exception.status.ResultCode
+import com.a03.concurrencycontrolproject.domain.ticket.exception.NotEnoughTicketException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.FieldError
@@ -79,5 +80,12 @@ class GlobalExceptionHandler {
             errors[fieldName] = errorMessage ?: "Not Exception Message"
         }
         return ResponseEntity(BaseResponse(ResultCode.ERROR.name, errors, ResultCode.ERROR.msg), HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(NotEnoughTicketException::class)
+    fun handleNotEnoughTicketException(e: NotEnoughTicketException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .body(ErrorResponse(e.message))
     }
 }
