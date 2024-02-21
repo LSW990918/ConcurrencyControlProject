@@ -51,20 +51,5 @@ class RedisConfig {
             .fromConnectionFactory(redisConnectionFactory)
             .cacheDefaults(defaults).build()
     }
-
-
-//
-//    @Bean
-//    fun redisConnectionFactory(): RedisConnectionFactory =
-//        LettuceConnectionFactory()
-//
-//    @Bean
-//    fun redisTemplate():RedisTemplate<String,String>{
-//        return RedisTemplate<String,String>().apply{
-//            connectionFactory = redisConnectionFactory()
-//            keySerializer = StringRedisSerializer()
-//            valueSerializer = StringRedisSerializer()
-//        }
-//    }
 }
 

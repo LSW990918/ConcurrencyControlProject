@@ -2,7 +2,7 @@ package com.a03.concurrencycontrolproject.domain.ticket.service
 
 
 import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
-import com.a03.concurrencycontrolproject.common.redis.RedisService
+import com.a03.concurrencycontrolproject.common.redis.service.RedisService
 import com.a03.concurrencycontrolproject.domain.category.model.Category
 import com.a03.concurrencycontrolproject.domain.category.repository.CategoryRepository
 import com.a03.concurrencycontrolproject.domain.goods.model.Goods

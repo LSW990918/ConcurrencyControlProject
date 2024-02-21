@@ -5,6 +5,7 @@ import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
 import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
+import com.a03.concurrencycontrolproject.domain.ticket.exception.NotEnoughTicketException
 import com.a03.concurrencycontrolproject.domain.ticket.model.Ticket
 import com.a03.concurrencycontrolproject.domain.ticket.model.accessUser
 import com.a03.concurrencycontrolproject.domain.ticket.repository.TicketRepository

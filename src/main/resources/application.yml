@@ -56,11 +56,6 @@ spring:
     console:
       enabled: true # 콘솔을 enable 해야 H2 콘솔에 접근할 수 있다.
       path: /h2-console
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/test;MODE=MySQL
-    username: sa
-    password: 1234
 auth:
   jwt:
     issuer: team.sparta.com

@@ -1,6 +1,6 @@
 package com.a03.concurrencycontrolproject.domain.ticket.controller
 
-import com.a03.concurrencycontrolproject.common.redis.RedisService
+import com.a03.concurrencycontrolproject.common.redis.service.RedisService
 import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
