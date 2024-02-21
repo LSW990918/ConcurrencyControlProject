@@ -16,10 +16,9 @@ import org.springframework.stereotype.Service
 class TicketServiceImpl(
     private val ticketRepository: TicketRepository,
     private val goodsRepository: GoodsRepository,
-    private val userRepository: UserRepository,
+    private val userRepository: UserRepository
 ): TicketService {
 
-//    @Synchronized
     override fun createTicket(userId: Long, request: CreateTicketRequest) {
         val goods = goodsRepository.findByIdOrNull(request.goodsId)
             ?: throw ModelNotFoundException("Goods", request.goodsId)
@@ -29,9 +28,11 @@ class TicketServiceImpl(
             goods = goods,
             user = user
         )
-        if (goods.ticketAmount - goods.ticket.size <= 0) {
-            throw ModelNotFoundException("ticket", 1)
+
+        if(goods.ticketAmount - goods.ticket.size <= 0){
+            throw NotEnoughTicketException(goods.id!!)
         }
+
         ticketRepository.save(ticket)
     }
 

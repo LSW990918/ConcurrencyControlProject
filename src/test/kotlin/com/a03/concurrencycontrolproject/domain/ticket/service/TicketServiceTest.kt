@@ -1,4 +1,5 @@
-package com.a03.concurrencycontrolproject
+package com.a03.concurrencycontrolproject.domain.ticket.service
+
 
 import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
 import com.a03.concurrencycontrolproject.common.redis.RedisService
@@ -7,8 +8,8 @@ import com.a03.concurrencycontrolproject.domain.category.repository.CategoryRepo
 import com.a03.concurrencycontrolproject.domain.goods.model.Goods
 import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
+import com.a03.concurrencycontrolproject.domain.ticket.exception.NotEnoughTicketException
 import com.a03.concurrencycontrolproject.domain.ticket.repository.TicketRepository
-import com.a03.concurrencycontrolproject.domain.ticket.service.TicketService
 import com.a03.concurrencycontrolproject.domain.user.model.User
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRole
@@ -27,7 +28,7 @@ import java.util.concurrent.Executors
 @SpringBootTest
 @ExtendWith(MockKExtension::class)
 @ActiveProfiles("test")
-class Test(
+class TicketServiceTest(
     @Autowired val ticketRepository: TicketRepository,
     @Autowired val userRepository: UserRepository,
     @Autowired val goodsRepository: GoodsRepository,
@@ -40,8 +41,6 @@ class Test(
     @DisplayName("티켓 테스트")
     fun `ticket test`() {
         //given
-
-
         val user = User(
             email = "test@test.com",
             password = "a1234!",
@@ -70,6 +69,7 @@ class Test(
         val getGoods = goodsRepository.save(goods)
 
         val threadCount = 100
+
         val executorService = Executors.newFixedThreadPool(100)
         val countDownLatch = CountDownLatch(threadCount)
         val createTicketReq = CreateTicketRequest(goodsId = getGoods.id!!)
@@ -81,10 +81,9 @@ class Test(
             executorService.submit {
                 try {
                     redisService.createTicket(user.id!!, createTicketReq)
-                    success ++
-                } catch (e: ModelNotFoundException) {
-                    e.printStackTrace()
-                    fail ++
+                    success += 1
+                } catch (e: NotEnoughTicketException) {
+                    fail += 1
                 } finally {
                     countDownLatch.countDown()
                 }
@@ -94,11 +93,11 @@ class Test(
 
         // 시도한 횟수랑 = 실패 + 성공 횟수 같아야함.
         // 성공 횟수가 100이 아닌거는 동시성 문제해결.
-
         println("success : $success")
         println("fail : $fail")
+
         //then
-        Assertions.assertThat(success).isEqualTo(50)
-        Assertions.assertThat(fail).isEqualTo(50)
+        Assertions.assertThat(success).isEqualTo(goods.ticketAmount)
+        Assertions.assertThat(fail).isEqualTo(threadCount - goods.ticketAmount)
     }
 }
