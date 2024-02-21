@@ -1,4 +1,8 @@
 spring:
+  data:
+    redis:
+      host: 3.39.34.103
+      port: 6379
   jpa:
     hibernate:
       ddl-auto: update
