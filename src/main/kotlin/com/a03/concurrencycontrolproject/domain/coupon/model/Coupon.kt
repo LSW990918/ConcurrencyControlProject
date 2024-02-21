@@ -13,7 +13,7 @@ class Coupon(
     val couponName: String,
 
     @Column
-    val couponNumber: String,
+    var couponNumber: String,
 
     @Column
     var couponAmount: Long,
