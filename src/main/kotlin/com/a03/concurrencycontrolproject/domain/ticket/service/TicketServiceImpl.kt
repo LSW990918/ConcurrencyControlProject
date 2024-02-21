@@ -1,5 +1,6 @@
 package com.a03.concurrencycontrolproject.domain.ticket.service
 
+import com.a03.concurrencycontrolproject.common.aop.ConcurrencyControl
 import com.a03.concurrencycontrolproject.common.exception.AccessDeniedException
 import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
 import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
@@ -20,6 +21,7 @@ class TicketServiceImpl(
     private val userRepository: UserRepository
 ): TicketService {
 
+    @ConcurrencyControl("goods")
     override fun createTicket(userId: Long, request: CreateTicketRequest) {
         val goods = goodsRepository.findByIdOrNull(request.goodsId)
             ?: throw ModelNotFoundException("Goods", request.goodsId)

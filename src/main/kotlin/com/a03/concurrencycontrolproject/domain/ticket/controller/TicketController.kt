@@ -1,6 +1,5 @@
 package com.a03.concurrencycontrolproject.domain.ticket.controller
 
-import com.a03.concurrencycontrolproject.common.redis.service.RedisService
 import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/tickets")
 class TicketController(
-    private val ticketService: TicketService,
-    private val redisService: RedisService
-
+    private val ticketService: TicketService
 ) {
 
     @Operation(summary = "티켓 생성")
@@ -28,7 +25,7 @@ class TicketController(
     ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(redisService.createTicket(userPrincipal.id, request))
+            .body(ticketService.createTicket(userPrincipal.id, request))
     }
 
     @Operation(summary = "티켓 취소")

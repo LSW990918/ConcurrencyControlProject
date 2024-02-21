@@ -1,15 +1,12 @@
 package com.a03.concurrencycontrolproject.domain.ticket.service
 
 
-import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
-import com.a03.concurrencycontrolproject.common.redis.service.RedisService
 import com.a03.concurrencycontrolproject.domain.category.model.Category
 import com.a03.concurrencycontrolproject.domain.category.repository.CategoryRepository
 import com.a03.concurrencycontrolproject.domain.goods.model.Goods
 import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.exception.NotEnoughTicketException
-import com.a03.concurrencycontrolproject.domain.ticket.repository.TicketRepository
 import com.a03.concurrencycontrolproject.domain.user.model.User
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRole
@@ -29,12 +26,10 @@ import java.util.concurrent.Executors
 @ExtendWith(MockKExtension::class)
 @ActiveProfiles("test")
 class TicketServiceTest(
-    @Autowired val ticketRepository: TicketRepository,
     @Autowired val userRepository: UserRepository,
     @Autowired val goodsRepository: GoodsRepository,
     @Autowired val categoryRepository: CategoryRepository,
-    @Autowired val ticketService : TicketService,
-    @Autowired val redisService: RedisService
+    @Autowired val ticketService: TicketService
 ) {
 
     @Test
@@ -80,7 +75,7 @@ class TicketServiceTest(
         repeat(threadCount) {
             executorService.submit {
                 try {
-                    redisService.createTicket(user.id!!, createTicketReq)
+                    ticketService.createTicket(user.id!!, createTicketReq)
                     success += 1
                 } catch (e: NotEnoughTicketException) {
                     fail += 1
