@@ -22,7 +22,6 @@ spring:
         highlight_sql: true
         use_sql_comments: true
         default_batch_fetch_size: 500
-
 logging:
   level:
     org:
@@ -38,11 +37,6 @@ spring:
   config:
     activate:
       on-profile: test
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/test
-    username: sa
-    password:
   jpa:
     hibernate:
       ddl-auto: create
@@ -56,6 +50,11 @@ spring:
     console:
       enabled: true # 콘솔을 enable 해야 H2 콘솔에 접근할 수 있다.
       path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/test333
+    username: sa
+    password: 1234
 auth:
   jwt:
     issuer: team.sparta.com
