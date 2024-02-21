@@ -2,7 +2,6 @@ package com.a03.concurrencycontrolproject.domain.ticket.service
 
 import com.a03.concurrencycontrolproject.common.exception.AccessDeniedException
 import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
-import com.a03.concurrencycontrolproject.domain.goods.model.Goods
 import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
@@ -17,10 +16,10 @@ import org.springframework.stereotype.Service
 class TicketServiceImpl(
     private val ticketRepository: TicketRepository,
     private val goodsRepository: GoodsRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ): TicketService {
 
-    @Synchronized
+//    @Synchronized
     override fun createTicket(userId: Long, request: CreateTicketRequest) {
         val goods = goodsRepository.findByIdOrNull(request.goodsId)
             ?: throw ModelNotFoundException("Goods", request.goodsId)

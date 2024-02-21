@@ -1,6 +1,7 @@
 package com.a03.concurrencycontrolproject
 
 import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
+import com.a03.concurrencycontrolproject.common.redis.RedisService
 import com.a03.concurrencycontrolproject.domain.category.model.Category
 import com.a03.concurrencycontrolproject.domain.category.repository.CategoryRepository
 import com.a03.concurrencycontrolproject.domain.goods.model.Goods
@@ -31,7 +32,8 @@ class Test(
     @Autowired val userRepository: UserRepository,
     @Autowired val goodsRepository: GoodsRepository,
     @Autowired val categoryRepository: CategoryRepository,
-    @Autowired val ticketService : TicketService
+    @Autowired val ticketService : TicketService,
+    @Autowired val redisService: RedisService
 ) {
 
     @Test
@@ -78,7 +80,7 @@ class Test(
         repeat(threadCount) {
             executorService.submit {
                 try {
-                    ticketService.createTicket(user.id!!, createTicketReq)
+                    redisService.createTicket(user.id!!, createTicketReq)
                     success ++
                 } catch (e: ModelNotFoundException) {
                     e.printStackTrace()

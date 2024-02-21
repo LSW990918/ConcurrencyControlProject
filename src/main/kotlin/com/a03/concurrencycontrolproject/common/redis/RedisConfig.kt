@@ -12,8 +12,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer
 import java.time.Duration
 
 @Configuration
-class RedisConfig
- {
+class RedisConfig {
     @Bean
     fun redisConnectionFactory(): RedisConnectionFactory {
         return LettuceConnectionFactory()
@@ -22,7 +21,7 @@ class RedisConfig
     @Bean
     fun redisTemplate(
         redisConnectionFactory: RedisConnectionFactory
-    ): RedisTemplate<String, String>{
+    ): RedisTemplate<String, String> {
         val template = RedisTemplate<String, String>()
         template.connectionFactory = redisConnectionFactory
 
@@ -54,5 +53,18 @@ class RedisConfig
     }
 
 
-    }
+//
+//    @Bean
+//    fun redisConnectionFactory(): RedisConnectionFactory =
+//        LettuceConnectionFactory()
+//
+//    @Bean
+//    fun redisTemplate():RedisTemplate<String,String>{
+//        return RedisTemplate<String,String>().apply{
+//            connectionFactory = redisConnectionFactory()
+//            keySerializer = StringRedisSerializer()
+//            valueSerializer = StringRedisSerializer()
+//        }
+//    }
+}
 

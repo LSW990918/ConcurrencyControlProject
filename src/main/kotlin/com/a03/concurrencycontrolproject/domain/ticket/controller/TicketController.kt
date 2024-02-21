@@ -1,11 +1,11 @@
 package com.a03.concurrencycontrolproject.domain.ticket.controller
 
+import com.a03.concurrencycontrolproject.common.redis.RedisService
 import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
 import com.a03.concurrencycontrolproject.domain.ticket.service.TicketService
 import io.swagger.v3.oas.annotations.Operation
-
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/tickets")
 class TicketController(
-    private val ticketService: TicketService
+    private val ticketService: TicketService,
+    private val redisService: RedisService
+
 ) {
 
     @Operation(summary = "티켓 생성")
@@ -26,7 +28,7 @@ class TicketController(
     ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(ticketService.createTicket(userPrincipal.id, request))
+            .body(redisService.createTicket(userPrincipal.id, request))
     }
 
     @Operation(summary = "티켓 취소")
