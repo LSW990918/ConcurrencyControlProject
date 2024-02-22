@@ -1,6 +1,7 @@
 package com.a03.concurrencycontrolproject.domain.ticket.service
 
 
+import com.a03.concurrencycontrolproject.common.redis.service.RedissonLockService
 import com.a03.concurrencycontrolproject.domain.category.model.Category
 import com.a03.concurrencycontrolproject.domain.category.repository.CategoryRepository
 import com.a03.concurrencycontrolproject.domain.goods.model.Goods
@@ -29,7 +30,8 @@ class TicketServiceTest(
     @Autowired val userRepository: UserRepository,
     @Autowired val goodsRepository: GoodsRepository,
     @Autowired val categoryRepository: CategoryRepository,
-    @Autowired val ticketService: TicketService
+    @Autowired val ticketService: TicketService,
+    @Autowired val redissonLockService: RedissonLockService
 ) {
 
     @Test
@@ -75,7 +77,7 @@ class TicketServiceTest(
         repeat(threadCount) {
             executorService.submit {
                 try {
-                    ticketService.createTicket(user.id!!, createTicketReq)
+                    redissonLockService.createTicket(user.id!!, createTicketReq)
                     success += 1
                 } catch (e: NotEnoughTicketException) {
                     fail += 1

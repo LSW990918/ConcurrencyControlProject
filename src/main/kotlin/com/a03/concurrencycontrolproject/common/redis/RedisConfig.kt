@@ -1,5 +1,9 @@
 package com.a03.concurrencycontrolproject.common.redis
 
+import org.redisson.Redisson
+import org.redisson.api.RedissonClient
+import org.redisson.config.Config
+import org.redisson.spring.data.connection.RedissonConnectionFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -21,10 +25,25 @@ class RedisConfig() {
     @Value("\${spring.data.redis.port}")
     private var redisPort: Int = 6379
 
-    @Bean
-    fun redisConnectionFactory(): RedisConnectionFactory {
-        return LettuceConnectionFactory(redisHost, redisPort)
+    lateinit var redissonClient: RedissonClient
+
+    @Bean(destroyMethod = "shutdown")
+    fun redissonClient(): RedissonClient {
+        val config: Config = Config()
+        config.useSingleServer()
+            .setAddress("redis://$redisHost:$redisPort")
+            .setDnsMonitoringInterval(-1)
+        return Redisson.create(config)
     }
+    @Bean
+    fun redisConnectionFactory(redissonClient: RedissonClient): RedisConnectionFactory {
+        return RedissonConnectionFactory(redissonClient)
+    }
+
+//    @Bean
+//    fun redisConnectionFactory(): RedisConnectionFactory {
+//        return LettuceConnectionFactory(redisHost, redisPort)
+//    }
 
     @Bean
     fun redisTemplate(

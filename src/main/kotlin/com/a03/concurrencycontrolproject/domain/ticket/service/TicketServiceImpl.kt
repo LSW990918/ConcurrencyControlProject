@@ -21,7 +21,7 @@ class TicketServiceImpl(
     private val userRepository: UserRepository
 ): TicketService {
 
-    @ConcurrencyControl("goods")
+//    @ConcurrencyControl("goods")
     override fun createTicket(userId: Long, request: CreateTicketRequest) {
         val goods = goodsRepository.findByIdOrNull(request.goodsId)
             ?: throw ModelNotFoundException("Goods", request.goodsId)
