@@ -1,5 +1,6 @@
 package com.a03.concurrencycontrolproject.common.redis
 
+
 import org.redisson.Redisson
 import org.redisson.api.RedissonClient
 import org.redisson.config.Config
