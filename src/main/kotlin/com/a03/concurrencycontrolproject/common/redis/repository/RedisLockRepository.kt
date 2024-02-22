@@ -6,19 +6,19 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class RedisLockRepository(
-    private val redisTemplate: RedisTemplate<String,String>
+    private val redisTemplate: RedisTemplate<String, String>
 ) {
-    fun lock(id: Long): Boolean {
+    fun lock(name: String, id: Long): Boolean {
         return redisTemplate
             .opsForValue()
-            .setIfAbsent(generateKey(id), "lock", java.time.Duration.ofMillis(3000))!!
+            .setIfAbsent(generateKey(name, id), "Lock", java.time.Duration.ofMillis(3000))!!
     }
 
-    fun unlock(id: Long): Boolean {
-        return redisTemplate.delete(generateKey(id));
+    fun unlock(name: String, id: Long): Boolean {
+        return redisTemplate.delete(generateKey(name, id));
     }
 
-    private fun generateKey(id: Long): String {
-        return id.toString();
+    private fun generateKey(name: String, id: Long): String {
+        return "$name $id";
     }
 }

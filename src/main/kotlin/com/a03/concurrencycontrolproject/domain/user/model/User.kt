@@ -3,13 +3,11 @@ package com.a03.concurrencycontrolproject.domain.user.model
 import com.a03.concurrencycontrolproject.common.BaseTime
 import com.a03.concurrencycontrolproject.common.exception.EmailAlreadyExistException
 import com.a03.concurrencycontrolproject.common.exception.NicknameAlreadyExistException
-import com.a03.concurrencycontrolproject.common.exception.NotExistRoleException
 import com.a03.concurrencycontrolproject.common.exception.WrongEmailOrPasswordException
 import com.a03.concurrencycontrolproject.domain.goods.model.Goods
 import com.a03.concurrencycontrolproject.domain.review.model.Review
 import com.a03.concurrencycontrolproject.domain.ticket.model.Ticket
 import com.a03.concurrencycontrolproject.domain.user.dto.UpdateProfileRequest
-import com.a03.concurrencycontrolproject.domain.user.dto.UserResponse
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRepository
 import com.a03.concurrencycontrolproject.domain.user.repository.UserRole
 import jakarta.persistence.*
@@ -38,7 +36,7 @@ class User(
     @Column(name = "is_deleted")
     val isDeleted: Boolean = false
 
-    ) : BaseTime() {
+) : BaseTime() {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,7 +69,7 @@ fun checkedEmailOrNicknameExists(email: String, nickname: String, userRepository
 }
 
 fun checkedLoginPassword(password: String, inputPassword: String, passwordEncoder: PasswordEncoder) {
-    if(!passwordEncoder.matches(inputPassword, password)) {
+    if (!passwordEncoder.matches(inputPassword, password)) {
         throw WrongEmailOrPasswordException(inputPassword)
     }
 }

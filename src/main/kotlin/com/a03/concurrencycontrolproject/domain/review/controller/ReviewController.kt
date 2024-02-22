@@ -21,14 +21,21 @@ class ReviewController(
 
     @Operation(summary = "리뷰 생성")
     @PostMapping
-    fun createReview(@RequestBody createReviewRequest: CreateReviewRequest, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
-        return reviewService.createReview(createReviewRequest, userPrincipal).let { ResponseEntity.status(HttpStatus.CREATED) }.build()
+    fun createReview(
+        @RequestBody createReviewRequest: CreateReviewRequest,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
+    ): ResponseEntity<Unit> {
+        return reviewService.createReview(createReviewRequest, userPrincipal)
+            .let { ResponseEntity.status(HttpStatus.CREATED) }.build()
     }
 
-      
+
     @Operation(summary = "리뷰 수정")
     @PatchMapping()
-    fun updateReview(@RequestBody updateReviewRequest: UpdateReviewRequest, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
+    fun updateReview(
+        @RequestBody updateReviewRequest: UpdateReviewRequest,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
+    ): ResponseEntity<Unit> {
 
         val requests = UpdateReviewRequest(
             id = updateReviewRequest.id,
@@ -47,7 +54,11 @@ class ReviewController(
 
     @Operation(summary = "리뷰 삭제")
     @DeleteMapping("/{reviewId}")
-    fun deleteReview(@PathVariable reviewId: Long, @AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<Unit> {
-        return reviewService.deleteReview(reviewId, userPrincipal).let { ResponseEntity.status(HttpStatus.NO_CONTENT).build() }
+    fun deleteReview(
+        @PathVariable reviewId: Long,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
+    ): ResponseEntity<Unit> {
+        return reviewService.deleteReview(reviewId, userPrincipal)
+            .let { ResponseEntity.status(HttpStatus.NO_CONTENT).build() }
     }
 }

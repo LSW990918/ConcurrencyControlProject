@@ -14,9 +14,9 @@ interface CategoryService {
 
     fun deleteCategory(categoryId: Long)
 
-    fun getCategoryList() : List<CategoryResponse>
+    fun getCategoryList(): List<CategoryResponse>
 
-    fun getCategory(categoryId: Long) : CategoryResponse
+    fun getCategory(categoryId: Long): CategoryResponse
 
     fun getPaginatedCategoryList(pageable: Pageable, status: String?): Page<CategoryResponse>?
 }

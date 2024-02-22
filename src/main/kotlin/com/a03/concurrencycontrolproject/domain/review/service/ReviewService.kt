@@ -21,8 +21,12 @@ class ReviewService(
     private val userRepository: UserRepository
 ) {
     fun createReview(createReviewRequest: CreateReviewRequest, userPrincipal: UserPrincipal) {
-        val user = userRepository.findByIdOrNull(userPrincipal.id) ?: throw ModelNotFoundException("User", userPrincipal.id)
-        val goods = goodsRepository.findByIdOrNull(createReviewRequest.goodsId) ?: throw ModelNotFoundException("Goods", createReviewRequest.goodsId)
+        val user =
+            userRepository.findByIdOrNull(userPrincipal.id) ?: throw ModelNotFoundException("User", userPrincipal.id)
+        val goods = goodsRepository.findByIdOrNull(createReviewRequest.goodsId) ?: throw ModelNotFoundException(
+            "Goods",
+            createReviewRequest.goodsId
+        )
 
         reviewRepository.save(createReviewRequest.to(goods, user))
     }
@@ -30,9 +34,16 @@ class ReviewService(
 
     @Transactional
     fun updateReview(updateReviewRequest: UpdateReviewRequest, userPrincipal: UserPrincipal) {
-        val user = userRepository.findByIdOrNull(userPrincipal.id) ?: throw ModelNotFoundException("User", userPrincipal.id)
-        val goods = goodsRepository.findByIdOrNull(updateReviewRequest.goodsId) ?: throw ModelNotFoundException("Goods", updateReviewRequest.goodsId)
-        val review = reviewRepository.findByIdOrNull(updateReviewRequest.id) ?: throw ModelNotFoundException("Review", updateReviewRequest.id)
+        val user =
+            userRepository.findByIdOrNull(userPrincipal.id) ?: throw ModelNotFoundException("User", userPrincipal.id)
+        val goods = goodsRepository.findByIdOrNull(updateReviewRequest.goodsId) ?: throw ModelNotFoundException(
+            "Goods",
+            updateReviewRequest.goodsId
+        )
+        val review = reviewRepository.findByIdOrNull(updateReviewRequest.id) ?: throw ModelNotFoundException(
+            "Review",
+            updateReviewRequest.id
+        )
 
         review.checkAuthorization(user)
         reviewRepository.save(updateReviewRequest.to(goods, user))
@@ -46,8 +57,9 @@ class ReviewService(
 
 
     fun deleteReview(reviewId: Long, userPrincipal: UserPrincipal) {
-        val user = userRepository.findByIdOrNull(userPrincipal.id) ?: throw ModelNotFoundException("User", userPrincipal.id)
-        val review = reviewRepository.findByIdOrNull(reviewId) ?: throw  ModelNotFoundException("Review", reviewId)
+        val user =
+            userRepository.findByIdOrNull(userPrincipal.id) ?: throw ModelNotFoundException("User", userPrincipal.id)
+        val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
 
         review.checkAuthorization(user)
 

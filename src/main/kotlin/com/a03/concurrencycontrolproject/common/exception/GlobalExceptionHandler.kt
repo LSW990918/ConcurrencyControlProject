@@ -64,6 +64,7 @@ class GlobalExceptionHandler {
             .status(HttpStatus.NOT_FOUND)
             .body(ErrorResponse(e.message))
     }
+
     @ExceptionHandler(IllegalDateStateException::class)
     fun handleIllegalStateDateException(e: IllegalDateStateException): ResponseEntity<ErrorResponse> {
         return ResponseEntity

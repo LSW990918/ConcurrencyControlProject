@@ -2,11 +2,9 @@ package com.a03.concurrencycontrolproject.domain.category.model
 
 import com.a03.concurrencycontrolproject.common.BaseTime
 import com.a03.concurrencycontrolproject.domain.goods.model.Goods
-import com.a03.concurrencycontrolproject.domain.user.model.User
 import jakarta.persistence.*
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Table
-import org.hibernate.annotations.*
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.SQLRestriction
 
 @Entity
 @SQLDelete(sql = "UPDATE category SET is_deleted = true WHERE id = ?") // DELETE 쿼리 날아올 시 대신 실행
@@ -28,7 +26,7 @@ class Category(
     )
     var goodsList: MutableList<Goods> = mutableListOf(),
 
-) : BaseTime() {
+    ) : BaseTime() {
 
     @Id
     @Column(name = "id")

@@ -1,27 +1,44 @@
 package com.a03.concurrencycontrolproject.common.redis
 
+
+import org.redisson.Redisson
+import org.redisson.api.RedissonClient
+import org.redisson.config.Config
+import org.redisson.spring.data.connection.RedissonConnectionFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.cache.RedisCacheConfiguration
 import org.springframework.data.redis.cache.RedisCacheManager
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
+import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
 import java.time.Duration
 
 @Configuration
-class RedisConfig {
+class RedisConfig() {
+
     @Value("\${spring.data.redis.host}")
     private lateinit var redisHost: String
+
     @Value("\${spring.data.redis.port}")
     private var redisPort: Int = 6379
 
+    lateinit var redissonClient: RedissonClient
+
+    @Bean(destroyMethod = "shutdown")
+    fun redissonClient(): RedissonClient {
+        val config: Config = Config()
+        config.useSingleServer()
+            .setAddress("redis://$redisHost:$redisPort")
+            .setDnsMonitoringInterval(-1)
+        return Redisson.create(config)
+    }
+
     @Bean
-    fun redisConnectionFactory(): RedisConnectionFactory {
-        return LettuceConnectionFactory(redisHost, redisPort)
+    fun redisConnectionFactory(redissonClient: RedissonClient): RedisConnectionFactory {
+        return RedissonConnectionFactory(redissonClient)
     }
 
     @Bean

@@ -68,7 +68,7 @@ class CategoryController(
     ): ResponseEntity<Page<CategoryResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(categoryService.getPaginatedCategoryList(pageable,status))
+            .body(categoryService.getPaginatedCategoryList(pageable, status))
     }
 
     @Operation(summary = "카테고리 조회")

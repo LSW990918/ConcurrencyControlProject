@@ -29,7 +29,7 @@ class Ticket(
     @Column(name = "is_deleted", nullable = false)
     val isDeleted: Boolean = false
 
-): BaseTime() {
+) : BaseTime() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

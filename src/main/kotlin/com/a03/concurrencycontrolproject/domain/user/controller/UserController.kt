@@ -57,11 +57,11 @@ class UserController(
     @PostMapping("/signup")
     fun signup(
         @RequestParam userRole: UserRole,
-       @Valid @RequestBody request: SignupRequest
+        @Valid @RequestBody request: SignupRequest
     ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(userService.signup(userRole ,request))
+            .body(userService.signup(userRole, request))
     }
 
     @Operation(summary = "로그인")

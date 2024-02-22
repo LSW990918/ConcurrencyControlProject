@@ -1,6 +1,5 @@
 package com.a03.concurrencycontrolproject.domain.review.repository
 
-import com.a03.concurrencycontrolproject.domain.goods.model.Goods
 import com.a03.concurrencycontrolproject.domain.review.model.Review
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

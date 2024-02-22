@@ -18,11 +18,11 @@ class UserServiceImpl(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtPlugin: JwtPlugin
-): UserService {
+) : UserService {
 
     override fun getProfile(userId: Long): UserResponse {
-       return userRepository.findByIdOrNull(userId)?.let { UserResponse.from(it) }
-           ?: throw ModelNotFoundException("User", userId)
+        return userRepository.findByIdOrNull(userId)?.let { UserResponse.from(it) }
+            ?: throw ModelNotFoundException("User", userId)
     }
 
     override fun updateProfile(userId: Long, request: UpdateProfileRequest) {
@@ -33,7 +33,7 @@ class UserServiceImpl(
     }
 
 
-    override fun signup(userRole: UserRole ,request: SignupRequest) {
+    override fun signup(userRole: UserRole, request: SignupRequest) {
         checkedEmailOrNicknameExists(request.email, request.nickname, userRepository)
         userRepository.save(
             User(
