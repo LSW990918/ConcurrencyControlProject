@@ -1,5 +1,6 @@
-package com.a03.concurrencycontrolproject.common.aop
+package com.a03.concurrencycontrolproject.common.aop.spinlock
 
+import com.a03.concurrencycontrolproject.common.aop.ConcurrencyControlDto
 import com.a03.concurrencycontrolproject.common.redis.repository.RedisLockRepository
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
@@ -10,15 +11,15 @@ import org.springframework.stereotype.Component
 
 @Aspect
 @Component
-class ConcurrencyControlAspect(
+class SpinLockAspect(
     private val redisLockRepository: RedisLockRepository
 ) {
 
 
-    @Around("@annotation(com.a03.concurrencycontrolproject.common.aop.ConcurrencyControl) && args(..,request)")
+    @Around("@annotation(com.a03.concurrencycontrolproject.common.aop.spinlock.SpinLock) && args(..,request)")
     fun run(joinPoint: ProceedingJoinPoint, request: ConcurrencyControlDto) {
         val methodSignature = joinPoint.signature as MethodSignature
-        val annotation = methodSignature.method.getAnnotation(ConcurrencyControl::class.java)
+        val annotation = methodSignature.method.getAnnotation(SpinLock::class.java)
 
         val name = annotation?.name ?: ""
         try {

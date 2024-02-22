@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
 
 @Repository
-class ReviewQueryDslRepositoryImpl: QueryDslSupport(), ReviewQueryDslRepository {
+class ReviewQueryDslRepositoryImpl : QueryDslSupport(), ReviewQueryDslRepository {
     private val goods = QGoods.goods
     private val review = QReview.review
     override fun findReviewsByGoodsId(goodsId: Long, pageable: Pageable): Page<Review> {

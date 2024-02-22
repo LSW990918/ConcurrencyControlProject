@@ -1,7 +1,7 @@
-package com.a03.concurrencycontrolproject.common.aop
+package com.a03.concurrencycontrolproject.common.aop.spinlock
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ConcurrencyControl (
+annotation class SpinLock(
     val name: String
 )

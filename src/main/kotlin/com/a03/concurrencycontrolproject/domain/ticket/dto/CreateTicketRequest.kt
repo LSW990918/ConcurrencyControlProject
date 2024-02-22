@@ -7,4 +7,4 @@ data class CreateTicketRequest(
     val goodsId: Long,
     @JsonIgnore
     override val targetId: Long = goodsId
-): ConcurrencyControlDto
+) : ConcurrencyControlDto

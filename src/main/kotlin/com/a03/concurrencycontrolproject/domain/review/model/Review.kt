@@ -37,7 +37,7 @@ class Review(
     @OnDelete(action = OnDeleteAction.CASCADE)
     val goods: Goods
 
-):BaseTime() {
+) : BaseTime() {
     init {
         if (this.score < 0 || this.score > 5) {
             throw Exception("평점은 0점 이상 5점 이하로 입력해주세요")

@@ -1,6 +1,5 @@
 package com.a03.concurrencycontrolproject.domain.ticket.service
 
-import com.a03.concurrencycontrolproject.common.aop.ConcurrencyControl
 import com.a03.concurrencycontrolproject.common.exception.AccessDeniedException
 import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
 import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
@@ -19,20 +18,22 @@ class TicketServiceImpl(
     private val ticketRepository: TicketRepository,
     private val goodsRepository: GoodsRepository,
     private val userRepository: UserRepository
-): TicketService {
+) : TicketService {
 
-//    @ConcurrencyControl("goods")
+    //    @SpinLock("goods") //Lettuce 을 이용한 SpinLock
+//    @EventLock("goods") //Redisson 을 이용한 Pub-Sub 기반 Lock
+//    @RedissonSpinLock("goods") //Redisson 을 이용한 SpinLock
     override fun createTicket(userId: Long, request: CreateTicketRequest) {
         val goods = goodsRepository.findByIdOrNull(request.goodsId)
             ?: throw ModelNotFoundException("Goods", request.goodsId)
         val user = userRepository.findByIdOrNull(userId)
             ?: throw ModelNotFoundException("User", userId)
-        val ticket = Ticket (
+        val ticket = Ticket(
             goods = goods,
             user = user
         )
 
-        if(goods.ticketAmount - goods.ticket.size <= 0){
+        if (goods.ticketAmount - goods.ticket.size <= 0) {
             throw NotEnoughTicketException(goods.id!!)
         }
 
@@ -50,7 +51,7 @@ class TicketServiceImpl(
         val ticketList = ticketRepository.findAllByUserId(userId)
             ?: throw ModelNotFoundException("TicketList", userId)
         val ticketUser = ticketRepository.findByUserId(userId)
-            ?: throw ModelNotFoundException("Ticket",userId)
+            ?: throw ModelNotFoundException("Ticket", userId)
         accessUser(userId, ticketUser.user.id!!)
         return ticketList.map { TicketResponse.from(it) }
     }

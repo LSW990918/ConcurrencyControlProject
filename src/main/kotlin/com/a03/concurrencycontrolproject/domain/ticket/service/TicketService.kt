@@ -1,6 +1,5 @@
 package com.a03.concurrencycontrolproject.domain.ticket.service
 
-import com.a03.concurrencycontrolproject.common.security.jwt.UserPrincipal
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
 

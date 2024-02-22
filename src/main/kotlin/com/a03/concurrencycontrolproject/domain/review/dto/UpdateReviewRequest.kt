@@ -10,7 +10,7 @@ data class UpdateReviewRequest(
     val score: Int,
     val comment: String,
 ) {
-    fun to(goods: Goods, user: User) = Review (
+    fun to(goods: Goods, user: User) = Review(
         score = score,
         comment = comment,
         goods = goods,
