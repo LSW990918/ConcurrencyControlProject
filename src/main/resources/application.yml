@@ -1,11 +1,18 @@
 spring:
-  config:
-    activate:
-      on-profile: dev
   data:
     redis:
       host: 3.39.34.103
       port: 6379
+auth:
+  jwt:
+    issuer: team.sparta.com
+    secret: ${JWT_SECRET}
+    accessTokenExpirationHour: 168
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,6 +22,7 @@ spring:
         highlight_sql: true
         use_sql_comments: true
         default_batch_fetch_size: 500
+
 logging:
   level:
     org:
@@ -25,44 +33,31 @@ logging:
             bind: trace
       springframework:
         security: debug
-
-auth:
-  jwt:
-    issuer: team.sparta.com
-    secret: ${JWT_SECRET}
-    accessTokenExpirationHour: 168
-
-
 ---
-
 spring:
   config:
     activate:
       on-profile: test
-  data:
-    redis:
-      host: 3.39.34.103
-      port: 6379
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
-        format_sql: true
-    open-in-view: false
+        format_sql: false
+        highlight_sql: false
+        use_sql_comments: false
+        default_batch_fetch_size: 500
   h2:
     console:
       enabled: true # 콘솔을 enable 해야 H2 콘솔에 접근할 수 있다.
       path: /h2-console
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:~/test;MODE=MySQL
-    username: sa
-    password:
 auth:
   jwt:
     issuer: team.sparta.com
-    secret: PO4c8z41Hia5gJG3oeuFJMRYBB4Ws4aZ
+    secret: a123sadhuoi213sadoiuzxcio2137Asd
     accessTokenExpirationHour: 168
-

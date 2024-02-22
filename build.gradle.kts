@@ -63,7 +63,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")//시큐리티
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")//시큐리티
     runtimeOnly("org.postgresql:postgresql")
-//    runtimeOnly ("com.h2database:h2")
+    runtimeOnly ("com.h2database:h2")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test") //기본 테스트 의존성
@@ -72,7 +72,10 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion") // kotest 관련
     testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.3") // kotest 관련
     testImplementation("io.mockk:mockk:$mockkVersion") // mockk
-//    testImplementation("org.postgresql:postgresql")//테스트용 데이터소스URL
+    testImplementation("org.postgresql:postgresql")//테스트용 데이터소스URL
+
+    implementation("org.springframework.boot:spring-boot-starter-data-redis") //Lettuce
+    implementation("org.redisson:redisson-spring-boot-starter:3.21.1") //Redisson
 
 }
 

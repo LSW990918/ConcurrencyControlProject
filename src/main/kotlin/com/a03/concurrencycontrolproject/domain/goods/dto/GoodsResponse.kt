@@ -1,6 +1,7 @@
 package com.a03.concurrencycontrolproject.domain.goods.dto
 
 import com.a03.concurrencycontrolproject.domain.goods.model.Goods
+import java.io.Serializable
 import java.time.LocalDateTime
 
 data class GoodsResponse(
@@ -13,7 +14,7 @@ data class GoodsResponse(
     val ticketAmount: Int,
     val availableTicketAmount: Int,
     val price: Int
-) {
+) : Serializable {
     companion object {
         fun from(goods: Goods): GoodsResponse {
             return GoodsResponse(

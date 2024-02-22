@@ -1,10 +1,12 @@
 package com.a03.concurrencycontrolproject.domain.ticket.service
 
+import com.a03.concurrencycontrolproject.common.aop.ConcurrencyControl
 import com.a03.concurrencycontrolproject.common.exception.AccessDeniedException
 import com.a03.concurrencycontrolproject.common.exception.ModelNotFoundException
 import com.a03.concurrencycontrolproject.domain.goods.repository.GoodsRepository
 import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
+import com.a03.concurrencycontrolproject.domain.ticket.exception.NotEnoughTicketException
 import com.a03.concurrencycontrolproject.domain.ticket.model.Ticket
 import com.a03.concurrencycontrolproject.domain.ticket.model.accessUser
 import com.a03.concurrencycontrolproject.domain.ticket.repository.TicketRepository
@@ -18,6 +20,8 @@ class TicketServiceImpl(
     private val goodsRepository: GoodsRepository,
     private val userRepository: UserRepository
 ): TicketService {
+
+//    @ConcurrencyControl("goods")
     override fun createTicket(userId: Long, request: CreateTicketRequest) {
         val goods = goodsRepository.findByIdOrNull(request.goodsId)
             ?: throw ModelNotFoundException("Goods", request.goodsId)
@@ -27,6 +31,11 @@ class TicketServiceImpl(
             goods = goods,
             user = user
         )
+
+        if(goods.ticketAmount - goods.ticket.size <= 0){
+            throw NotEnoughTicketException(goods.id!!)
+        }
+
         ticketRepository.save(ticket)
     }
 

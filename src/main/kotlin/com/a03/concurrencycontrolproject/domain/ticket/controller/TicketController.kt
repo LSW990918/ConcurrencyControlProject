@@ -5,7 +5,6 @@ import com.a03.concurrencycontrolproject.domain.ticket.dto.CreateTicketRequest
 import com.a03.concurrencycontrolproject.domain.ticket.dto.TicketResponse
 import com.a03.concurrencycontrolproject.domain.ticket.service.TicketService
 import io.swagger.v3.oas.annotations.Operation
-
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
