@@ -23,6 +23,8 @@
     - 동시성 제어를 위한 테스트코드
     - Redis를 이용한 Lock 구현
 
+## 프로젝트 진행사항
+- [github project](https://github.com/users/LSW990918/projects/2)
 
 
 ## **📚기술스택**
@@ -87,7 +89,7 @@
 - <strong>이시원</strong>
     -
 - <strong>윤승환</strong>
-    -
+    - 좋은 팀원들을 만나 동시성이라는 새로운 기술을 더 깊게 공부할 수 있었던 프로젝트였습니다.
 - <strong>이승상</strong>
     - 이번 프로젝트로 redis 와 lock 을 공부했고 얻은게 많은 프로젝트. 팀원들과 협업부분도 좋았습니다.
 - <strong>박미소</strong>
