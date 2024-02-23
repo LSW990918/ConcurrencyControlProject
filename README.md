@@ -1,4 +1,4 @@
-# <strong>BackOfficeProject</strong>
+# <strong>ConcurrencyControlProject</strong>
 
 
 ## 🎁 프로젝트 개요
