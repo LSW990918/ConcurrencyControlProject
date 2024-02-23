@@ -1,4 +1,4 @@
-# <strong>ConcurrencyControlProject</strong>
+# <strong>BackOfficeProject</strong>
 
 
 ## 🎁 프로젝트 개요
@@ -32,7 +32,7 @@
 <img src="https://img.shields.io/badge/Kotlin-663399?style=for-the-badge&logo=Kotlin&logoColor=white"/></a>
 <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white">
 <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white">
-<img src="https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white">
+<img src="	https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white">
 <img src="https://img.shields.io/badge/Redis-FF2D20?style=for-the-badge&logo=Redis&logoColor=white">
 <img src="https://img.shields.io/badge/Swagger-6DB33F?style=for-the-badge&logo=Swagger&logoColor=white">
 <img src="https://img.shields.io/badge/H2-FF2D20?style=for-the-badge&logo=H2&logoColor=white">
@@ -85,10 +85,10 @@
 
 ### 프로젝트 후기
 - <strong>이시원</strong>
-    - 처음으로 테스트코드와 동시성을 해결해보는 Lock을 직접 구현해보고 좋은 공부가 되었습니다.
+    -
 - <strong>윤승환</strong>
-    - 
+    -
 - <strong>이승상</strong>
     - 이번 프로젝트로 redis 와 lock 을 공부했고 얻은게 많은 프로젝트. 팀원들과 협업부분도 좋았습니다.
 - <strong>박미소</strong>
-    - 
+    - redis 와 동시성 제어에 대해 알게 됐고 팀원분들의 인사이트를 얻는 좋은 기회였습니다.
