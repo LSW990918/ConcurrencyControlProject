@@ -65,7 +65,7 @@
   - JWT Token 기반 인증/인가
     - Spring Security 활용
 
-## :robot_face:동시성을 위해 사용한 lock
+## 동시성을 위해 사용한 lock
 ### @Synchronized 
 - 장점 : 코드 간결성, 간단한 사용법, 일관성 유지
 - 단점 : 단일 서버에서는 잘 작동하지만 서버를 scale out 해서 여러 대의 서버에서 작동할 경우 동시성 해결 불가
