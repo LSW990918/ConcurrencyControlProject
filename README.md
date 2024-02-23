@@ -23,7 +23,7 @@
     - 동시성 제어를 위한 테스트코드
     - Redis를 이용한 Lock 구현
 
-## 프로젝트 진행사항
+## 🚩 프로젝트 진행사항
 - [github project](https://github.com/users/LSW990918/projects/2)
 
 
